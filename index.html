@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth" style="scroll-padding-top: 100px;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Grupo Positano | Alta Gastronomía</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        display: ['Bebas Neue', 'sans-serif'],
+                    },
+                    colors: {
+                        krokanteBlue: '#0d5c75',
+                        krokanteRed: '#ef4444',
+                        krokanteYellow: '#fbbf24',
+                        positanoDark: '#1a2721',
+                        positanoCream: '#fcfbf8',
+                        astraDark: '#080808',
+                    },
+                    animation: {
+                        'marquee': 'marquee 25s linear infinite',
+                        'spin-slow': 'spin 15s linear infinite',
+                        'fade-in': 'fadeIn 1.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @media (pointer: fine) { body { cursor: none; } }
+        body { background-color: #fcfbf8; overflow-x: hidden; width: 100%; }
+        
+        .custom-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background-color: white; 
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .custom-cursor.hovering {
+            width: 60px; height: 60px;
+            background-color: transparent;
+            border: 2px solid white;
+        }
+
+        .reveal-wrapper {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-wrapper.active {
+            opacity: 1; transform: translateY(0);
+        }
+
+        ::-webkit-scrollbar { width: 0px; }
+        .clip-diagonal { clip-path: polygon(0 2%, 100% 0, 100% 98%, 0 100%); }
+
+        @media (max-width: 768px) {
+            .clip-diagonal { clip-path: none; }
+        }
+
+        /* Marquee: en pantallas muy pequeñas reducimos aún más el tamaño de letra
+           para que las palabras no se amontonen */
+        @media (max-width: 380px) {
+            .marquee-track {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Scroll Spy Base */
+        .nav-link { opacity: 0.5; }
+        .nav-link.active-link {
+            opacity: 1 !important;
+            font-weight: 800;
+        }
+        .nav-link.active-link::after { width: 100% !important; }
+
+        /* Estilo Minimalista Dropdown */
+        .dropdown-container {
+            position: relative;
+        }
+        .dropdown-menu {
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+        .dropdown-container:hover .dropdown-menu {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="text-black antialiased selection:bg-black selection:text-white">
+
+    <div class="custom-cursor hidden md:block" id="cursor"></div>
+
+    <div class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-5xl flex flex-col items-center gap-2 transition-transform duration-500" id="navbar-container">
+        <!-- Navbar Principal -->
+        <nav class="bg-white/90 backdrop-blur-lg border border-gray-200 rounded-full px-5 md:px-10 py-3.5 md:py-4 flex justify-between items-center shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 text-black w-full" id="navbar">
+            
+            <a href="#inicio" class="font-display tracking-[0.15em] text-lg md:text-2xl uppercase hover-target transition-colors duration-300 truncate max-w-[180px] md:max-w-none" id="nav-brand">Grupo Positano</a>
+            
+            <div class="hidden md:flex gap-10 items-center text-[11px] font-bold tracking-[0.2em] uppercase text-black" id="nav-links">
+                <a href="#positano" class="nav-link hover-target transition-all duration-300 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full">Positano</a>
+                <a href="#krokante" class="nav-link hover-target transition-all duration-300 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full">Krokante</a>
+                <a href="#astra" class="nav-link hover-target transition-all duration-300 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full">Astra</a>
+                
+                <!-- Dropdown Super Minimalista "El Grupo" -->
+                <div class="dropdown-container py-2">
+                    <a href="#grupo" class="nav-link hover-target transition-all duration-300 relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full flex items-center gap-1.5">
+                        El Grupo
+                        <svg class="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </a>
+                    <div class="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 pt-3 w-56">
+                        <div class="bg-white/95 backdrop-blur-md border border-black/10 rounded-2xl shadow-xl p-2 flex flex-col gap-1 text-[10px] tracking-[0.15em] font-semibold text-black uppercase">
+                            <a href="#filosofia" class="px-4 py-2.5 rounded-xl hover:bg-black hover:text-white transition-all duration-200">Filosofía</a>
+                            <a href="#mision-vision" class="px-4 py-2.5 rounded-xl hover:bg-black hover:text-white transition-all duration-200">Misión y Visión</a>
+                            <a href="#eventos" class="px-4 py-2.5 rounded-xl hover:bg-black hover:text-white transition-all duration-200">Próximos Eventos</a>
+                            <a href="#pqr" class="px-4 py-2.5 rounded-xl hover:bg-black hover:text-white transition-all duration-200">PQR</a>
+                            <a href="#trabaja" class="px-4 py-2.5 rounded-xl hover:bg-black hover:text-white transition-all duration-200">Trabaja con Nosotros</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="md:hidden flex flex-col gap-1.5 hover-target z-[60] group relative w-6 h-5 justify-center p-1 focus:outline-none" id="mobile-menu-btn" aria-label="Menú móvil">
+                <span class="w-full h-[2px] bg-current block transition-all duration-300 absolute top-1" id="line1"></span>
+                <span class="w-full h-[2px] bg-current block transition-all duration-300 absolute top-1/2 -translate-y-1/2" id="line2"></span>
+                <span class="w-full h-[2px] bg-current block transition-all duration-300 absolute bottom-1" id="line3"></span>
+            </button>
+        </nav>
+
+        <!-- Sub-píldora para Redes Sociales -->
+        <div class="bg-white/80 backdrop-blur-md border border-gray-200/80 rounded-full px-6 py-1.5 hidden md:flex items-center gap-4 shadow-sm text-black transition-all duration-500" id="social-pill">
+            <span class="text-[9px] font-bold tracking-[0.2em] uppercase opacity-60">Síguenos</span>
+            <div class="w-[1px] h-3 bg-current opacity-20"></div>
+            <div class="flex items-center gap-4">
+                <a href="https://instagram.com" target="_blank" class="hover:scale-110 transition-transform hover-target opacity-80 hover:opacity-100" aria-label="Instagram">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://tiktok.com" target="_blank" class="hover:scale-110 transition-transform hover-target opacity-80 hover:opacity-100" aria-label="TikTok">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                </a>
+                <a href="https://whatsapp.com" target="_blank" class="hover:scale-110 transition-transform hover-target opacity-80 hover:opacity-100" aria-label="WhatsApp">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.124-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú Móvil Fullscreen optimizado -->
+    <div class="fixed inset-0 bg-black/98 z-40 hidden flex-col justify-between items-center py-24 px-6 opacity-0 transition-opacity duration-500 backdrop-blur-2xl overflow-y-auto" id="mobile-menu">
+        <div class="flex flex-col items-center gap-6 text-center my-auto w-full">
+            <a href="#positano" class="mobile-link text-white font-serif text-3xl hover-target">Positano</a>
+            <a href="#krokante" class="mobile-link text-white font-serif text-3xl hover-target">Krokante</a>
+            <a href="#astra" class="mobile-link text-white font-serif text-3xl hover-target">Astra</a>
+            <div class="w-12 h-[1px] bg-white/20 my-2"></div>
+            <a href="#filosofia" class="mobile-link text-white/70 font-sans text-xs tracking-widest uppercase hover-target">Filosofía</a>
+            <a href="#mision-vision" class="mobile-link text-white/70 font-sans text-xs tracking-widest uppercase hover-target">Misión y Visión</a>
+            <a href="#eventos" class="mobile-link text-white/70 font-sans text-xs tracking-widest uppercase hover-target">Próximos Eventos</a>
+            <a href="#pqr" class="mobile-link text-white/70 font-sans text-xs tracking-widest uppercase hover-target">PQR</a>
+            <a href="#trabaja" class="mobile-link text-white/70 font-sans text-xs tracking-widest uppercase hover-target">Trabaja con Nosotros</a>
+        </div>
+        
+        <!-- Redes Sociales en Menú Móvil -->
+        <div class="flex items-center gap-6 text-white/80 pt-6 border-t border-white/10 w-full justify-center">
+            <a href="https://instagram.com" target="_blank" class="p-2" aria-label="Instagram">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" class="p-2" aria-label="TikTok">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+            </a>
+            <a href="https://whatsapp.com" target="_blank" class="p-2" aria-label="WhatsApp">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.124-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION CON VIDEO DE FONDO Y ALTO CONTRASTE -->
+    <section id="inicio" class="section-spy relative min-h-screen flex items-center justify-center overflow-hidden text-white pt-28 md:pt-36 px-4 md:px-0" data-theme="dark">
+        <!-- Video de fondo en bucle -->
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0 filter brightness-75">
+            <source src="https://www.pexels.com/es-es/download/video/39030478/" type="video/mp4">
+            Tu navegador no soporta videos HTML5.
+        </video>
+        <!-- Capa de oscurecimiento / Overlay -->
+        <div class="absolute inset-0 bg-black/75 z-0"></div>
+        
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center px-4 md:px-6 relative z-10">
+            <div class="space-y-6 md:space-y-8 order-2 lg:order-1 flex flex-col justify-center animate-fade-in text-center lg:text-left">
+                <div class="flex items-center justify-center lg:justify-start gap-4">
+                    <div class="w-8 h-[1px] bg-white/60"></div>
+                    <p class="font-sans tracking-[0.3em] text-[10px] uppercase font-bold text-white/75">Ibagué, Tolima</p>
+                </div>
+                <h1 class="font-serif text-4xl sm:text-6xl lg:text-8xl leading-[1.1] tracking-tight drop-shadow-md">
+                    Experiencias<br>
+                    <span class="italic text-white/50">gastronómicas</span><br>
+                    con identidad.
+                </h1>
+                <p class="font-sans text-sm md:text-base text-white/80 max-w-md mx-auto lg:mx-0 leading-relaxed font-light drop-shadow">
+                    Tres conceptos únicos unidos por una misma visión: redefinir la forma en que vives, sientes y disfrutas la cocina.
+                </p>
+                <div class="pt-2 flex justify-center lg:justify-start">
+                    <a href="#positano" class="hover-target inline-flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-full border border-white/40 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
+                            <svg class="w-4 h-4 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        </div>
+                        <span class="font-bold uppercase tracking-widest text-[10px] text-white/90 group-hover:text-white">Explorar</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="order-1 lg:order-2 flex justify-center relative items-center min-h-[30vh] md:min-h-[40vh] animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="relative w-64 sm:w-80 lg:max-w-md aspect-square bg-white/10 border border-white/15 rounded-full shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] flex items-center justify-center p-8 sm:p-12 backdrop-blur-md">
+                    <img src="assets/logo_grupo_positano.png" alt="Grupo Positano" class="w-full h-auto border-2 border-white/20 rounded-full object-contain opacity-95">
+                    <div class="absolute -top-4 right-6 sm:right-10 w-20 sm:w-24 h-20 sm:h-24 bg-krokanteRed rounded-full mix-blend-screen opacity-30 animate-pulse"></div>
+                    <div class="absolute -bottom-6 left-8 sm:left-12 w-28 sm:w-32 h-28 sm:h-32 bg-white/10 rounded-full mix-blend-screen opacity-20 animate-bounce" style="animation-duration: 3s;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN POSITANO -->
+    <section id="positano" class="section-spy relative min-h-screen bg-positanoCream py-20 md:py-32 px-6 md:px-20 overflow-hidden border-t border-black/5" data-theme="light">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            <div class="lg:col-span-5 space-y-8 md:space-y-10 z-10 relative">
+                <div class="reveal-wrapper">
+                    <img src="assets/PositanoLogo.png" alt="Positano" class="w-48 md:w-64 object-contain mix-blend-multiply">
+                </div>
+                <div class="reveal-wrapper">
+                    <h2 class="font-serif text-4xl sm:text-5xl md:text-7xl leading-[1.1]">
+                        El arte de la<br><span class="italic text-gray-500">pasta artesanal.</span>
+                    </h2>
+                </div>
+                <div class="reveal-wrapper">
+                    <p class="font-sans text-sm md:text-base leading-relaxed text-positanoDark/80 max-w-md font-light">
+                        Una oda a la tradición italiana. Ingredientes cuidadosamente seleccionados que se transforman en memorias en tu paladar. Un ambiente diseñado para el romance y la familia.
+                    </p>
+                </div>
+                <div class="reveal-wrapper pt-2">
+                    <a href="Positano.html">
+                    <button class="hover-target group flex items-center gap-4">
+                        <span class="font-bold uppercase tracking-widest text-[10px] border-b border-black pb-1 group-hover:pr-4 transition-all duration-300">Visitar Experiencia</span>
+                        <span class="transform group-hover:translate-x-2 transition-transform">→</span>
+                    </button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 grid grid-cols-2 gap-4 md:gap-8 relative z-0">
+                <div class="reveal-wrapper mt-8 md:mt-32">
+                    <div class="w-full aspect-[2/3] rounded-t-[5rem] md:rounded-t-[10rem] overflow-hidden shadow-2xl relative">
+                        <div class="absolute inset-0 w-full h-[120%] -top-[10%]" data-parallax="-0.15">
+                            <img src="assets/localPositano.webp" class="w-full h-full object-cover" alt="Pasta Positano">
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal-wrapper">
+                    <div class="w-full aspect-[3/4] overflow-hidden shadow-2xl relative">
+                        <div class="absolute inset-0 w-full h-[120%] -top-[10%]" data-parallax="0.15">
+                            <img src="assets/Imagen2Positano.webp" class="w-full h-full object-cover" alt="Pizza Positano">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="w-full bg-krokanteRed overflow-hidden py-3 sm:py-4 md:py-5 relative z-20 shadow-xl">
+        <div class="w-[200%] flex animate-marquee text-black font-display uppercase">
+            <div class="marquee-track w-1/2 flex items-center whitespace-nowrap text-xl sm:text-3xl md:text-5xl lg:text-7xl tracking-normal sm:tracking-wide">
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRUNCHY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">BOLD</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">TASTY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRISPY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRUNCHY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">BOLD</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">TASTY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRISPY</span><span class="opacity-70">&bull;</span>
+            </div>
+            <div class="marquee-track w-1/2 flex items-center whitespace-nowrap text-xl sm:text-3xl md:text-5xl lg:text-7xl tracking-normal sm:tracking-wide">
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRUNCHY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">BOLD</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">TASTY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRISPY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRUNCHY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">BOLD</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">TASTY</span><span class="opacity-70">&bull;</span>
+                <span class="mx-2.5 sm:mx-4 md:mx-6">CRISPY</span><span class="opacity-70">&bull;</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN KROKANTE -->
+    <section id="krokante" class="section-spy relative min-h-screen bg-krokanteBlue text-white py-20 md:py-32 px-6 md:px-20 overflow-hidden clip-diagonal" data-theme="krokante">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] md:text-[25vw] font-display font-bold opacity-[0.03] text-white whitespace-nowrap pointer-events-none select-none z-0">CHICKEN</div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 h-full">
+            <div class="w-full lg:w-1/2 relative flex justify-center items-center py-6 md:py-12">
+                <div class="reveal-wrapper w-full max-w-sm md:max-w-md">
+                    <div class="relative aspect-[4/5] w-full mx-auto group">
+                        <div class="absolute inset-0 bg-krokanteYellow -rotate-6 rounded-3xl transform transition-transform duration-500 group-hover:-rotate-12"></div>
+                        <div class="absolute inset-0 bg-black rotate-3 rounded-3xl overflow-hidden border-4 border-white shadow-2xl transform transition-transform duration-500 group-hover:rotate-0">
+                            <img src="assets/KrokanteLocal2.webp" class="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-110" alt="Fried Chicken">
+                        </div>
+                        <img src="assets/KrokanteLogo.png" alt="Krokante Logo" class="absolute -bottom-8 md:-bottom-12 -right-4 md:-right-8 w-44 sm:w-56 md:w-72 drop-shadow-[0_15px_15px_rgba(0,0,0,0.6)] z-20 hover:scale-105 transition-transform duration-300 hover-target">
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-1/2 space-y-6 md:space-y-8 lg:pl-12 text-center lg:text-left">
+                <div class="reveal-wrapper">
+                    <h2 class="font-display text-5xl sm:text-7xl md:text-9xl leading-[0.85] tracking-tight">
+                        ROMPE<br><span class="text-transparent [-webkit-text-stroke:2px_#ef4444]">LA RUTINA</span>
+                    </h2>
+                </div>
+                <div class="reveal-wrapper">
+                    <p class="font-sans text-sm md:text-base font-light max-w-md mx-auto lg:mx-0 text-white/90 leading-relaxed">
+                        No venimos a ser sutiles. Venimos a hacer ruido. El crujido perfecto, salsas adictivas y una actitud que se devora de un solo bocado.
+                    </p>
+                </div>
+                <div class="reveal-wrapper pt-4 flex justify-center lg:justify-start">
+                    <a href="Krokante.html">
+                    <button class="hover-target bg-[#ee4837] text-white px-8 md:px-12 py-4 md:py-5 font-black uppercase tracking-[0.2em] text-xs shadow-[8px_8px_0px_rgba(255,255,255,1)] hover:translate-y-2 hover:translate-x-2 hover:shadow-[0px_0px_0px_rgba(255,255,255,1)] transition-all duration-200">
+                        Visitar Experiencia Crujiente
+                    </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN ASTRA -->
+    <section id="astra" class="section-spy relative min-h-screen flex flex-col justify-center bg-astraDark text-white py-20 md:py-32 px-6 md:px-20" data-theme="dark">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(30,30,30,0.5)_0%,rgba(8,8,8,1)_100%)] z-0"></div>
+        
+        <div class="max-w-7xl mx-auto w-full z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div class="order-2 lg:order-1 space-y-8 md:space-y-12">
+                <div class="reveal-wrapper flex justify-center lg:justify-start">
+                    <img src="assets/Astra.jpeg" alt="Astra" class="w-56 md:w-80 object-contain invert opacity-90 drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                </div>
+                
+                <div class="space-y-6 text-center lg:text-left">
+                    <div class="reveal-wrapper">
+                        <h2 class="font-serif text-3xl sm:text-4xl md:text-6xl font-light uppercase tracking-[0.1em] leading-tight">
+                            Fuego.<br>Precisión.<br><span class="italic text-white/40">Instinto.</span>
+                        </h2>
+                    </div>
+                    <div class="reveal-wrapper">
+                        <p class="font-sans font-light text-white/60 text-sm md:text-base max-w-md mx-auto lg:mx-0 leading-relaxed">
+                            Cortes madurados a la perfección. Una parrilla que no perdona errores y una bodega de vinos seleccionada para los paladares más exigentes.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="reveal-wrapper flex justify-center lg:justify-start">
+                    <a href="Astra.html">
+                    <button class="hover-target relative overflow-hidden group border border-white/20 px-10 md:px-12 py-4 md:py-5 uppercase tracking-[0.3em] text-xs font-light transition-all duration-500 bg-transparent">
+                        <span class="relative z-10 group-hover:text-black transition-colors duration-500">Visitar Experiencia</span>
+                        <div class="absolute inset-0 bg-white translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+                    </button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="order-1 lg:order-2 flex justify-center items-center">
+                <div class="reveal-wrapper w-full max-w-sm lg:max-w-lg aspect-square">
+                    <div class="relative w-full h-full p-4 sm:p-6 border border-white/10 rounded-full flex items-center justify-center group">
+                        <div class="absolute inset-0 border-t border-r border-white/30 rounded-full animate-spin-slow"></div>
+                        <div class="absolute inset-4 border-b border-l border-white/10 rounded-full animate-[spin_25s_linear_infinite_reverse]"></div>
+                        
+                        <div class="w-full h-full rounded-full overflow-hidden relative grayscale group-hover:grayscale-0 transition-all duration-1000">
+                            <div class="absolute inset-0 w-[120%] h-[120%] -top-[10%] -left-[10%]" data-parallax="-0.08">
+                                <img src="assets/negro.jpg" class="w-full h-full object-cover" alt="Premium Steak">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto w-full mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 z-10">
+            <div class="reveal-wrapper aspect-[3/4] w-full overflow-hidden border border-white/20 rounded-2xl group shadow-2xl relative">
+                <img src="assets/comidaAstra.webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Bebida Astra">
+            </div>
+            <div class="reveal-wrapper aspect-[3/4] w-full overflow-hidden border border-white/20 rounded-2xl group shadow-2xl relative" style="transition-delay: 0.1s;">
+                <img src="assets/comidaAstra1.webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Celebración Astra">
+            </div>
+            <div class="reveal-wrapper aspect-[3/4] w-full overflow-hidden border border-white/20 rounded-2xl group shadow-2xl relative" style="transition-delay: 0.2s;">
+                <img src="assets/comidaAstra3.webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Ambiente Astra">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: EL GRUPO -->
+    <div id="grupo" class="section-spy" data-theme="light">
+        
+        <section id="filosofia" class="relative py-20 md:py-32 px-6 md:px-20 bg-positanoCream text-black border-t border-black/5">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 md:gap-16">
+                <div class="w-full md:w-1/2 space-y-6 md:space-y-8">
+                    <div class="reveal-wrapper">
+                        <div class="flex items-center gap-4 mb-4 md:mb-6">
+                            <div class="w-12 h-[1px] bg-black/30"></div>
+                            <p class="font-sans tracking-[0.2em] text-[10px] uppercase font-bold text-black/50">Nuestra Filosofía</p>
+                        </div>
+                        <h2 class="font-serif text-3xl sm:text-4xl md:text-6xl leading-tight">
+                            Más que restaurantes,<br><span class="italic text-gray-500">creamos cultura.</span>
+                        </h2>
+                    </div>
+                    <div class="reveal-wrapper space-y-4">
+                        <p class="font-sans text-black/70 text-sm md:text-base leading-relaxed font-light">
+                            Grupo Positano nace con un propósito claro: revolucionar y elevar la escena gastronómica del Tolima. Entendemos que salir a comer no es solo alimentarse, es participar de una narrativa visual, sensorial y humana.
+                        </p>
+                        <p class="font-sans text-black/70 text-sm md:text-base leading-relaxed font-light">
+                            No seguimos fórmulas prediseñadas ni plantillas. Cada uno de nuestros espacios está meticulosamente estructurado para transportar a nuestros comensales.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10 md:gap-y-12">
+                    <div class="reveal-wrapper space-y-3 md:space-y-4 border-l border-black/10 pl-6">
+                        <h3 class="font-display text-4xl md:text-5xl text-black">03</h3>
+                        <p class="font-sans text-xs uppercase tracking-widest text-black/50 font-bold">Conceptos Únicos</p>
+                        <p class="font-sans text-xs text-black/60 font-light">Tres identidades contrastantes, unificadas por el mismo estándar de excelencia.</p>
+                    </div>
+                    
+                    <div class="reveal-wrapper space-y-3 md:space-y-4 border-l border-black/10 pl-6" style="transition-delay: 0.2s;">
+                        <h3 class="font-display text-4xl md:text-5xl text-black">100%</h3>
+                        <p class="font-sans text-xs uppercase tracking-widest text-black/50 font-bold">Talento Local</p>
+                        <p class="font-sans text-xs text-black/60 font-light">Apostamos firmemente por Ibagué, trabajando de la mano con productores de la región.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mision-vision" class="relative py-20 md:py-32 px-6 md:px-20 bg-zinc-100 text-black border-t border-black/5">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+                <div class="reveal-wrapper space-y-4">
+                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400">Propósito</span>
+                    <h3 class="font-serif text-3xl md:text-4xl">Misión</h3>
+                    <p class="font-sans text-sm md:text-base text-gray-600 font-light leading-relaxed">
+                        Brindar experiencias gastronómicas memorables a través de la experimentación, el diseño inmersivo y un servicio excepcional, consolidando marcas con alma propia que conecten profundamente con la comunidad de Ibagué.
+                    </p>
+                </div>
+                <div class="reveal-wrapper space-y-4" style="transition-delay: 0.2s;">
+                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400">Proyección</span>
+                    <h3 class="font-serif text-3xl md:text-4xl">Visión</h3>
+                    <p class="font-sans text-sm md:text-base text-gray-600 font-light leading-relaxed">
+                        Ser reconocidos para el 2030 como el holding gastronómico líder en innovación de conceptos y diseño en la región central del país, expandiendo nuestra pasión por la alta cocina y el entretenimiento culinario.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="eventos" class="relative py-20 md:py-32 px-6 md:px-20 bg-positanoCream text-black border-t border-black/5">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="reveal-wrapper flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                    <div>
+                        <p class="font-sans tracking-[0.2em] text-[10px] uppercase font-bold text-black/50 mb-2">Agenda Cultural</p>
+                        <h3 class="font-serif text-3xl sm:text-4xl md:text-5xl">Próximos Eventos</h3>
+                    </div>
+                    <p class="text-xs text-gray-500 font-light max-w-xs">Vive experiencias exclusivas, catas maridaje y noches temáticas en nuestros restaurantes.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <div class="reveal-wrapper bg-white p-6 md:p-8 rounded-3xl border border-black/5 space-y-4 shadow-sm">
+                        <div class="text-[10px] font-bold tracking-widest uppercase bg-black text-white px-3 py-1 inline-block rounded-full">Próximamente</div>
+                        <h4 class="font-serif text-xl md:text-2xl font-bold">Evento en preparación</h4>
+                        <p class="font-sans text-xs text-gray-600 font-light leading-relaxed">...</p>
+                    </div>
+                    <div class="reveal-wrapper bg-white p-6 md:p-8 rounded-3xl border border-black/5 space-y-4 shadow-sm" style="transition-delay: 0.1s;">
+                        <div class="text-[10px] font-bold tracking-widest uppercase bg-krokanteRed text-white px-3 py-1 inline-block rounded-full">Próximamente</div>
+                        <h4 class="font-serif text-xl md:text-2xl font-bold">Evento en preparación</h4>
+                        <p class="font-sans text-xs text-gray-600 font-light leading-relaxed">...</p>
+                    </div>
+                    <div class="reveal-wrapper bg-white p-6 md:p-8 rounded-3xl border border-black/5 space-y-4 shadow-sm" style="transition-delay: 0.2s;">
+                        <div class="text-[10px] font-bold tracking-widest uppercase bg-amber-800 text-white px-3 py-1 inline-block rounded-full">Próximamente</div>
+                        <h4 class="font-serif text-xl md:text-2xl font-bold">Evento en preparación</h4>
+                        <p class="font-sans text-xs text-gray-600 font-light leading-relaxed">...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative py-20 md:py-32 px-6 md:px-20 bg-zinc-100 text-black border-t border-black/5">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+                <div id="trabaja" class="reveal-wrapper bg-black text-white p-8 md:p-12 rounded-3xl space-y-6 flex flex-col justify-between shadow-lg scroll-mt-32">
+                    <div class="space-y-4">
+                        <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-white/50">Únete al equipo</span>
+                        <h3 class="font-serif text-3xl md:text-4xl">Trabaja con Nosotros</h3>
+                        <p class="font-sans text-sm text-white/70 font-light leading-relaxed">
+                            ¿Te apasiona la alta cocina, el servicio impecable o la innovación digital? Buscamos talentos audaces que quieran crecer con Grupo Positano.
+                        </p>
+                    </div>
+                    <button class="hover-target w-full border border-white/30 py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-white hover:text-black transition-all duration-300">
+                        Enviar Hoja de Vida
+                    </button>
+                </div>
+
+                <div id="pqr" class="reveal-wrapper bg-white p-8 md:p-12 rounded-3xl border border-black/5 space-y-6 flex flex-col justify-between shadow-sm scroll-mt-32" style="transition-delay: 0.2s;">
+                    <div class="space-y-4">
+                        <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400">Atención al cliente</span>
+                        <h3 class="font-serif text-3xl md:text-4xl">PQR (Peticiones, Quejas y Reclamos)</h3>
+                        <p class="font-sans text-sm text-gray-600 font-light leading-relaxed">
+                            Tu opinión es el motor principal de nuestra mejora continua. Canaliza tus comentarios o solicitudes directamente con nuestro equipo de calidad.
+                        </p>
+                    </div>
+                    <button class="hover-target w-full bg-black text-white py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-gray-800 transition-all duration-300">
+                        Radicar Solicitud
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTER ESTRUCTURADO -->
+    <footer class="bg-black text-white py-16 md:py-20 px-6 md:px-20 border-t border-white/10 font-sans">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 pb-16 border-b border-white/10">
+            <!-- Col 1: Marca e Identidad -->
+            <div class="space-y-6">
+                <img src="assets/logo_grupo_positano.png" class="w-36 md:w-40 opacity-90 border-2 border-white/20 rounded-full" alt="Grupo Positano">
+                <p class="text-xs text-white/60 font-light leading-relaxed">
+                    Grupo gastronómico que integra conceptos audaces y experiencias culinarias inolvidables.
+                </p>
+                <p class="text-[10px] tracking-widest uppercase text-white/40 font-bold">Ibagué, Tolima, Colombia</p>
+            </div>
+
+            <!-- Col 2: Enlaces Rápidos -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold tracking-[0.2em] uppercase text-white">Enlaces Rápidos</h4>
+                <ul class="space-y-2.5 text-xs font-light text-white/70">
+                    <li><a href="#inicio" class="hover:text-white transition-colors">Inicio</a></li>
+                    <li><a href="#positano" class="hover:text-white transition-colors">Positano</a></li>
+                    <li><a href="#krokante" class="hover:text-white transition-colors">Krokante</a></li>
+                    <li><a href="#astra" class="hover:text-white transition-colors">Astra</a></li>
+                    <li><a href="#grupo" class="hover:text-white transition-colors">El Grupo</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Legal, Datos y PQR -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold tracking-[0.2em] uppercase text-white">Legal y Políticas</h4>
+                <ul class="space-y-2.5 text-xs font-light text-white/70">
+                    <li><a href="#pqr" class="hover:text-white transition-colors">PQR (Peticiones, Quejas y Reclamos)</a></li>
+                    <li><a href="#trabaja" class="hover:text-white transition-colors">Trabaja con Nosotros</a></li>
+                    <li><button onclick="openModal('modal-datos')" class="hover:text-white transition-colors text-left cursor-pointer">Política de Tratamiento de Datos</button></li>
+                    <li><button onclick="openModal('modal-terminos')" class="hover:text-white transition-colors text-left cursor-pointer">Términos y Condiciones</button></li>
+                    <li><button onclick="openModal('modal-habeas')" class="hover:text-white transition-colors text-left cursor-pointer">Habeas Data</button></li>
+                </ul>
+            </div>
+
+            <!-- Col 4: Horarios y Estado -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold tracking-[0.2em] uppercase text-white">Atención</h4>
+                <p class="text-xs font-light text-white/70 leading-relaxed">
+                    Comprometidos con la excelencia y la transparencia en cada servicio que ofrecemos a nuestra comunidad.
+                </p>
+                <div class="pt-2">
+                    <span class="inline-block text-[10px] uppercase tracking-widest bg-white/10 px-3 py-1.5 rounded-full text-white/80 font-semibold">Abierto todos los días</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright y Enlaces Inferiores -->
+        <div class="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-light text-white/40 gap-4 text-center sm:text-left">
+            <p>&copy; 2026 Grupo Positano. Todos los derechos reservados.</p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <button onclick="openModal('modal-datos')" class="hover:text-white transition-colors">Privacidad</button>
+                <button onclick="openModal('modal-terminos')" class="hover:text-white transition-colors">Términos</button>
+                <button onclick="openModal('modal-habeas')" class="hover:text-white transition-colors">Habeas Data</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: Política de Tratamiento de Datos -->
+    <div id="modal-datos" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white text-black w-full max-w-2xl rounded-3xl p-6 md:p-12 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] overflow-y-auto">
+            <button onclick="closeModal('modal-datos')" class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-black hover:text-white transition-colors font-bold">✕</button>
+            <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-2 block">Protección de la información</span>
+            <h3 class="font-serif text-2xl md:text-4xl mb-6">Política de Tratamiento de Datos</h3>
+            <div class="space-y-4 text-xs md:text-sm text-gray-600 font-light leading-relaxed">
+                <p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013 en Colombia, Grupo Positano actúa como responsable del tratamiento de los datos personales obtenidos a través de este sitio web y de nuestros establecimientos en Ibagué.</p>
+                <p><strong>Finalidad del tratamiento:</strong> Los datos recolectados (nombre, teléfono, correo electrónico) serán utilizados exclusivamente para:</p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>Gestionar reservas, pedidos y servicios de nuestros conceptos (Positano, Krokante, Astra).</li>
+                    <li>Enviar información institucional, comercial, novedades y eventos exclusivos de Grupo Positano.</li>
+                    <li>Atender solicitudes, PQR (Peticiones, Quejas y Reclamos) y procesos de selección ("Trabaja con nosotros").</li>
+                </ul>
+                <p>Usted, como titular de los datos, tiene derecho a conocer, actualizar, rectificar y suprimir su información, así como a revocar la autorización otorgada enviando su solicitud a nuestro canal de atención al cliente.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Términos y Condiciones -->
+    <div id="modal-terminos" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white text-black w-full max-w-2xl rounded-3xl p-6 md:p-12 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] overflow-y-auto">
+            <button onclick="closeModal('modal-terminos')" class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-black hover:text-white transition-colors font-bold">✕</button>
+            <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-2 block">Normativa de Uso</span>
+            <h3 class="font-serif text-2xl md:text-4xl mb-6">Términos y Condiciones</h3>
+            <div class="space-y-4 text-xs md:text-sm text-gray-600 font-light leading-relaxed">
+                <p>El acceso y navegación por este sitio web de Grupo Positano atribuye la condición de usuario e implica la aceptación total y sin reservas de los presentes términos y condiciones.</p>
+                <p><strong>Propiedad Intelectual:</strong> Todos los contenidos, logotipos, marcas, fotografías y diseños exhibidos en este sitio son propiedad exclusiva de Grupo Positano o cuentan con las debidas licencias de uso, estando protegidos por la legislación de derechos de autor.</p>
+                <p><strong>Limitación de Responsabilidad:</strong> Las reservas, cartas, precios y disponibilidad de nuestros menús están sujetos a cambios sin previo aviso según la temporada y la ubicación en Ibagué, Tolima.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Habeas Data -->
+    <div id="modal-habeas" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white text-black w-full max-w-2xl rounded-3xl p-6 md:p-12 shadow-2xl relative transform scale-95 transition-transform duration-300 max-h-[85vh] overflow-y-auto">
+            <button onclick="closeModal('modal-habeas')" class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-black hover:text-white transition-colors font-bold">✕</button>
+            <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-2 block">Derechos Constitucionales</span>
+            <h3 class="font-serif text-2xl md:text-4xl mb-6">Habeas Data</h3>
+            <div class="space-y-4 text-xs md:text-sm text-gray-600 font-light leading-relaxed">
+                <p>El derecho de Habeas Data faculta a los ciudadanos a conocer, actualizar, rectificar y suprimir la información que sobre ellos se repose en bases de datos públicas o privadas.</p>
+                <p>Grupo Positano garantiza el ejercicio de este derecho mediante procedimientos sencillos y gratuitos, asegurando que sus registros cuenten con los estándares de seguridad necesarios para evitar adulteración, pérdida o acceso no autorizado.</p>
+                <p>Para ejercer sus derechos de Habeas Data, puede radicar su solicitud directamente a través de nuestra sección de PQR o mediante nuestros canales de contacto oficiales.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- Funciones Globales para Modales --- */
+        window.openModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('div > div').classList.remove('scale-95');
+                    modal.querySelector('div > div').classList.add('scale-100');
+                }, 10);
+            }
+        }
+
+        window.closeModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('opacity-0');
+                modal.querySelector('div > div').classList.remove('scale-100');
+                modal.querySelector('div > div').classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+
+        // Cerrar al hacer clic fuera del contenido del modal
+        document.querySelectorAll('.fixed.inset-0').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            /* --- 1. Cursor Magnético (Solo desktop) --- */
+            const cursor = document.getElementById('cursor');
+            const hoverTargets = document.querySelectorAll('.hover-target, button, a');
+
+            if (window.matchMedia("(pointer: fine)").matches) {
+                document.addEventListener('mousemove', (e) => {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                });
+                hoverTargets.forEach(target => {
+                    target.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+                    target.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+                });
+            }
+
+            /* --- 2. Menú Móvil --- */
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            let isMenuOpen = false;
+
+            const toggleMenu = () => {
+                isMenuOpen = !isMenuOpen;
+                if (isMenuOpen) {
+                    mobileMenu.classList.remove('hidden');
+                    setTimeout(() => mobileMenu.classList.remove('opacity-0'), 10);
+                    document.getElementById('line1').classList.add('rotate-45', 'translate-y-2');
+                    document.getElementById('line2').classList.add('opacity-0');
+                    document.getElementById('line3').classList.add('-rotate-45', '-translate-y-2');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.add('opacity-0');
+                    setTimeout(() => mobileMenu.classList.add('hidden'), 500);
+                    document.getElementById('line1').classList.remove('rotate-45', 'translate-y-2');
+                    document.getElementById('line2').classList.remove('opacity-0');
+                    document.getElementById('line3').classList.remove('-rotate-45', '-translate-y-2');
+                    document.body.style.overflow = 'auto';
+                }
+            };
+            mobileBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            /* --- 3. Navbar Dinámico y Scroll Spy Avanzado --- */
+            const navbar = document.getElementById('navbar');
+            const navBrand = document.getElementById('nav-brand');
+            const socialPill = document.getElementById('social-pill');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section-spy');
+            
+            window.addEventListener('scroll', () => {
+                let currentTheme = 'light';
+                let currentSectionId = '';
+                
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight / 3 && rect.bottom >= window.innerHeight / 3) {
+                        currentTheme = section.getAttribute('data-theme') || 'light';
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navbar.classList.remove('bg-white/90', 'bg-black/90', 'bg-[#fbbf24]', 'bg-[#ee4837]', 'border-gray-200', 'border-white/10', 'border-black/10', 'text-black', 'text-white');
+                navBrand.classList.remove('text-black', 'text-white');
+                socialPill.classList.remove('bg-white/80', 'bg-black/80', 'bg-[#ee4837]', 'border-gray-200/80', 'border-white/10', 'border-black/10', 'text-black', 'text-white');
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('hover:text-black', 'hover:text-white', 'text-black/40', 'text-white/50', 'text-black/60', 'text-white/70', '!text-white', '!text-black', 'active-link');
+                });
+
+                if (currentTheme === 'dark') {
+                    navbar.classList.add('bg-black/90', 'border-white/10', 'text-white');
+                    navBrand.classList.add('text-white');
+                    socialPill.classList.add('bg-black/80', 'border-white/10', 'text-white');
+                    navLinks.forEach(link => link.classList.add('hover:text-white', 'text-white/50'));
+                
+                } else if (currentTheme === 'krokante') {
+                    navbar.classList.add('bg-[#ee4837]', 'border-black/10', 'text-white');
+                    navBrand.classList.add('text-white');
+                    socialPill.classList.add('bg-[#ee4837]', 'border-black/10', 'text-white');
+                    navLinks.forEach(link => link.classList.add('hover:text-white', 'text-white/70'));
+                
+                } else {
+                    navbar.classList.add('bg-white/90', 'border-gray-200', 'text-black');
+                    navBrand.classList.add('text-black');
+                    socialPill.classList.add('bg-white/80', 'border-gray-200/80', 'text-black');
+                    navLinks.forEach(link => link.classList.add('hover:text-black', 'text-black/40'));
+                }
+
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active-link');
+                        if (currentTheme === 'dark' || currentTheme === 'krokante') {
+                            link.classList.add('!text-white');
+                        } else {
+                            link.classList.add('!text-black');
+                        }
+                    }
+                });
+            });
+
+            /* --- 4. Revelado y Parallax (Optimizado para evitar jank en móviles) --- */
+            const revealElements = document.querySelectorAll('.reveal-wrapper');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            const parallaxElements = document.querySelectorAll('[data-parallax]');
+            const updateParallax = () => {
+                if (window.innerWidth < 768) return; // Desactivar parallax pesado en mobile para prevenir tirones
+                const viewportCenter = window.innerHeight / 2;
+                parallaxElements.forEach(el => {
+                    const speed = parseFloat(el.getAttribute('data-parallax'));
+                    const rect = el.parentElement.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        const distance = (rect.top + rect.height / 2) - viewportCenter;
+                        el.style.transform = `translateY(${distance * speed}px)`;
+                    }
+                });
+            };
+            window.addEventListener('scroll', () => requestAnimationFrame(updateParallax), { passive: true });
+            updateParallax();
+        });
+    </script>
+</body>
+</html>

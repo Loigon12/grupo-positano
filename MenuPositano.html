@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Completo | Positano Pizzería</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="assets/Positano/positano.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0F1F17',
+                        brandLight: '#FAFAFA',
+                        brandAccent: '#D2371E',
+                        brandMuted: '#8C938F'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        script: ['Caveat', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+         body { background-color: #FAFAFA; color: #0F1F17; }
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        @media (max-width: 768px) {
+            .parallax-bg { background-attachment: scroll; }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAFAFA; }
+        ::-webkit-scrollbar-thumb { background: #0F1F17; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D2371E; }
+        
+        /* Ocultar scroll cuando el modal está abierto */
+        body.modal-open { overflow: hidden; }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+    <!-- Navbar Dinámico -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-500 bg-transparent py-4 md:py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="Positano.html" class="flex items-center gap-3 group">
+                    <img src="assets/Positano/positano.jpg" alt="Positano Logo" class="h-12 w-12 md:h-16 md:w-16 object-cover rounded-full shadow-md group-hover:scale-105 transition-transform duration-500 border border-brandDark/10 bg-white">
+                    <div class="flex flex-col hidden sm:flex">
+                        <span id="logo-title" class="font-script font-bold text-3xl md:text-4xl text-brandDark transition-colors duration-500 leading-none">Positano</span>
+                        <span id="logo-subtitle" class="font-sans text-[9px] md:text-[10px] tracking-[0.3em] font-semibold text-brandDark transition-colors duration-500 uppercase mt-1">Cocina Italiana</span>
+                    </div>
+                </a>
+
+                <!-- Enlaces Desktop -->
+                <nav class="hidden md:flex space-x-8 lg:space-x-10 items-center">
+                    <a href="Experiencia_Positano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandDark hover:text-brandAccent transition-colors mix-blend-difference">LA EXPERIENCIA</a>
+                    <a href="Menu_Positano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandDark hover:text-brandAccent transition-colors mix-blend-difference">MENÚ</a>
+                    <a href="Ubicacion_Positano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandDark hover:text-brandAccent transition-colors mix-blend-difference">UBICACIÓN</a>
+                    <a href="Positano.html#reservas" class="bg-brandDark text-brandLight px-6 py-2 rounded-full uppercase tracking-widest text-xs font-bold hover:bg-brandAccent hover:text-white transition-all duration-300 shadow-lg border border-transparent">Reservar</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="btn-mobile" class="md:hidden text-brandDark bg-white/90 p-2 rounded-full shadow-sm hover:text-brandAccent focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Móvil Desplegable -->
+        <div id="menu-mobile" class="fixed inset-0 bg-brandLight/98 backdrop-blur-md z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center space-y-6 hidden">
+            <button id="btn-close" class="absolute top-6 right-6 text-brandDark hover:text-brandAccent p-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <a href="Experiencia_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">La Experiencia</a>
+            <a href="Menu_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">Menú</a>
+            <a href="Ubicacion_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">Ubicación</a>
+            <a href="https://www.instagram.com/positano_01/" target="_blank" class="mobile-link mt-6 bg-brandDark text-brandLight px-8 py-3 rounded-full text-sm uppercase tracking-widest hover:bg-brandAccent hover:text-white transition-all">Siguenos en IG</a>
+        </div>
+    </header>
+
+    <br><br><br><br>
+    
+    <section class="max-w-7xl mx-auto px-6 lg:px-8 pt-10 pb-16 md:pt-20 md:pb-24">
+        
+        <!-- ENTRADAS -->
+        <div class="text-center mb-10 mt-8">
+            <h4 class="text-brandMuted uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-3">La Carta</h4>
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Entradas</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Burrata, Peras y Trufas</h3>
+                    <span class="font-sans font-bold text-brandAccent">$36.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Burrata de Búfala, tomates deshidratados, peras anisadas, prosciutto, cama de rugula, reducción de trufas.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Burrata al Pesto</h3>
+                    <span class="font-sans font-bold text-brandAccent">$36.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Burrata de búfala bañada en pesto, tomates confitados, prosciutto, cama de rugula en vinagreta cítrica.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Deditos Mozzarella</h3>
+                    <span class="font-sans font-bold text-brandAccent">$32.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Crocantes acompañados de lechuga de temporada y miel mostaza.</p>
+            </div>
+        </div>
+
+        <!-- ENSALADAS -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Ensaladas</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Ensalada Cesar de Pollo</h3>
+                    <span class="font-sans font-bold text-brandAccent">$33.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Mix de lechuga, pollo finas hierbas, crutones, tocineta, aderezo cesar, laminas de Grana Padano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Ensalada Cesar de Salmón Ahumado</h3>
+                    <span class="font-sans font-bold text-brandAccent">$37.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Mix de lechuga, salmón ahumado, crutones, tocineta, aderezo cesar, laminas de Grana Padano.</p>
+            </div>
+        </div>
+
+        <!-- DEL MAR (SALMÓN) -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Salmón</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+            <p class="text-brandAccent font-bold text-xs md:text-sm uppercase tracking-widest mt-6">Elige 2 Acompañantes: Vegetales salteados • Ensalada de la casa • Pasta en salsa Alfredo • Pasta en salsa Pomodoro • Risotto de la casa</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow justify-center">
+                <div class="flex justify-between items-baseline border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Salmón a la Plancha</h3>
+                    <span class="font-sans font-bold text-brandAccent">$49.000</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow justify-center">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Salmón al Limón</h3>
+                    <span class="font-sans font-bold text-brandAccent">$51.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salmón en salsa de limón.</p>
+            </div>
+        </div>
+
+        <!-- POLLO -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Pollo</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Milanesa Pizzaiola</h3>
+                    <span class="font-sans font-bold text-brandAccent">$43.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Milanesa de pollo con pomodoro, quesos gratinados, acompañado con mix de lechuga de temporada y papas a la francesa.</p>
+            </div>
+        </div>
+
+        <!-- CARNES -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Carnes</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+            <p class="text-brandAccent font-bold text-xs md:text-sm uppercase tracking-widest mt-6">Elige 2 Acompañantes: Vegetales salteados • Ensalada de la casa • Pasta en salsa Alfredo • Pasta en salsa Pomodoro • Risotto de la casa</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Lomo Positano</h3>
+                    <span class="font-sans font-bold text-brandAccent">$49.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Medallones relleno con tocineta, champiñón, bañado en salsa oscura y gratinado de queso.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Lomo Tres Quesos</h3>
+                    <span class="font-sans font-bold text-brandAccent">$50.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Medallones de Lomo parrillado, en salsa de queso Azul, Holandés y Grana Padano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Lomo Carbonara</h3>
+                    <span class="font-sans font-bold text-brandAccent">$48.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Medallones de Lomo parrillado en salsa carbonara.</p>
+            </div>
+        </div>
+
+        <!-- RISOTTOS -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Risottos</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Setas y Parmesano</h3>
+                    <span class="font-sans font-bold text-brandAccent">$42.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Arborio con champiñones, puré de trufas, vino blanco y parmesano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Frutos del Mar</h3>
+                    <span class="font-sans font-bold text-brandAccent">$49.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Arborio con camarones, calamar, mejillones y almejas, salteados en vino blanco.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Pollo y Champiñon</h3>
+                    <span class="font-sans font-bold text-brandAccent">$44.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Arborio con pollo marinado, salteado en vino blanco y champiñón, con salsa Alfredo.</p>
+            </div>
+        </div>
+
+        <!-- LASAGNAS -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Lasagnas</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Lasagna Bolognesa</h3>
+                    <span class="font-sans font-bold text-brandAccent">$40.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa de ragú bolognese.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Canelones Mixtos</h3>
+                    <span class="font-sans font-bold text-brandAccent">$45.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Combinación de salsa bolognese, cubos de pollo, y quesos, sobre un espejo de napolitana y bañados en salsa Alfredo, finaliza con un gratinado.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Lasagna Mixta</h3>
+                    <span class="font-sans font-bold text-brandAccent">$41.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Combinación de pollo y champiñón en salsa Alfredo y ragú bolognese.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Lasagna de Pollo y Champiñón</h3>
+                    <span class="font-sans font-bold text-brandAccent">$40.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Pollo en finas hierbas salteado con champiñón y vino blanco en salsa Alfredo.</p>
+            </div>
+        </div>
+
+        <!-- PASTAS -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Pastas</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Bolognesa</h3>
+                    <span class="font-sans font-bold text-brandAccent">$38.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">En salsa de Ragú Bolognese.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Al Pesto con Pollo</h3>
+                    <span class="font-sans font-bold text-brandAccent">$39.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Cubos de pollo en finas hierbas, pesto artesanal, bocconcini y almendras tostadas.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Penne al Forno</h3>
+                    <span class="font-sans font-bold text-brandAccent">$45.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Pollo parrillado salteado con vino blanco en salsa Alfredo y tocineta crocante, finaliza con un gratinado de quesos.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Alfredo con Pollo</h3>
+                    <span class="font-sans font-bold text-brandAccent">$41.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Pollo, crema, parmesano y albahaca.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Alfredo con Camaron</h3>
+                    <span class="font-sans font-bold text-brandAccent">$46.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Camarones, crema, parmesano y albahaca.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Tres Quesos</h3>
+                    <span class="font-sans font-bold text-brandAccent">$39.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Fusión de queso holandés, queso azul y laminas de Grana Padano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Frutos del Mar</h3>
+                    <span class="font-sans font-bold text-brandAccent">$49.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Camarones, calamar, mejillones y almejas.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Amatriciana</h3>
+                    <span class="font-sans font-bold text-brandAccent">$41.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Cubos de pollo, tocineta, pomodoro y albahaca.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Al Telefono con Burrata y Pesto</h3>
+                    <span class="font-sans font-bold text-brandAccent">$46.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa rose, Burrata de Búfala, bocconcini y albahaca.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Carbonara</h3>
+                    <span class="font-sans font-bold text-brandAccent">$38.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">En salsa blanca, tocineta salteada con vino blanco, tocineta crocante y parmesano.</p>
+            </div>
+        </div>
+
+        <!-- PIZZAS -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Pizzas</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+            <p class="text-gray-500 mt-6 max-w-xl mx-auto font-light text-sm md:text-base">Masa fermentada por 48 horas, ingredientes importados de Italia y productos locales de la más alta calidad.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Positano - Ganadora Pizza Master 2022</h3>
+                    <span class="font-sans font-bold text-brandAccent">$42.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, cubos de pollo en finas hierbas, tomate cherry, champiñon, aderezo de la casa, rúgula, albahaca y parmeggiano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Domenica - Ganadora Pizza Master 2022</h3>
+                    <span class="font-sans font-bold text-brandAccent">$39.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, rodajas de pepperoni, piña caramelizada, pesto y parmeggiano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Portofino - Ganadora Pizza Master 2023</h3>
+                    <span class="font-sans font-bold text-brandAccent">$42.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa pesto, queso mozzarella, peras anisadas, stracciatella, proscciutto, rugula, parmeggiano y reducción de balsámico.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Jalisco - Pizza Master 2024</h3>
+                    <span class="font-sans font-bold text-brandAccent">$41.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, birria de res, coronada con cebolla morada y cilantro, acompañada con caldo de birria.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Roma - Ganadora Pizza Master 2025</h3>
+                    <span class="font-sans font-bold text-brandAccent">$45.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, lomo fino de res madurado salteado con champiñones, aderezo de trufa, albahaca, tocineta crocante y parmeggiano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Di Burrata y Proscciutto</h3>
+                    <span class="font-sans font-bold text-brandAccent">$44.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, burrata, proscciutto, rugula, tomate deshidratados y reducción de trufa.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Romance Argentino</h3>
+                    <span class="font-sans font-bold text-brandAccent">$41.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, lomo fino de res madurado, chunichurri y plátano maduro.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Funghi</h3>
+                    <span class="font-sans font-bold text-brandAccent">$36.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, mezcla de setas de temporada, rugula y Grana Padano.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Pepperoni & Miel</h3>
+                    <span class="font-sans font-bold text-brandAccent">$38.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, pepperoni, stracciatella, peras anisadas y baño de miel de peperoncino.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Cuatro Quesos</h3>
+                    <span class="font-sans font-bold text-brandAccent">$38.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, queso azul, queso mozzarella, queso holandés, rugula, láminas de Grana Padano y miel de romero.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Carnes</h3>
+                    <span class="font-sans font-bold text-brandAccent">$38.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, rodajas de pepperoni, chorizo español y salami.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Chorizo Español</h3>
+                    <span class="font-sans font-bold text-brandAccent">$37.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, chorizo español, queso azul y cebolla caramelizada en vino tinto.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Pepperoni</h3>
+                    <span class="font-sans font-bold text-brandAccent">$36.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella y rodajas de pepperoni.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Marinera</h3>
+                    <span class="font-sans font-bold text-brandAccent">$43.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, camarón, anillos de calamar, en salsa blanca con tomate cherry.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Pollo con Champiñón</h3>
+                    <span class="font-sans font-bold text-brandAccent">$36.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, cubos de pollo en finas hierbas, champiñon y portobello.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Hawaiana</h3>
+                    <span class="font-sans font-bold text-brandAccent">$35.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, tocineta premium y piña caramelizada.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Margherita</h3>
+                    <span class="font-sans font-bold text-brandAccent">$34.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, bocconcini y albahaca.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-baseline mb-2 border-b border-dashed border-gray-200 pb-2">
+                    <h3 class="font-serif text-xl text-brandDark">Caprichosa</h3>
+                    <span class="font-sans font-bold text-brandAccent">$36.000</span>
+                </div>
+                <p class="text-gray-500 text-sm font-light mt-2">Salsa napolitana, queso mozzarella, carne desmechada, champiñón, pimentón y cebolla en plumas.</p>
+            </div>
+        </div>
+
+        <!-- BEBIDAS, HELADOS Y POSTRES -->
+        <div class="text-center mb-10 mt-16">
+            <h2 class="font-serif text-4xl md:text-5xl text-brandDark">Bebidas y Más</h2>
+            <div class="w-16 h-1 bg-brandAccent mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Bebidas Generales -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <h3 class="font-serif text-xl text-brandDark mb-4 border-b border-brandAccent pb-2 inline-block">Hatsu y Refrescos</h3>
+                <div class="space-y-3 mt-2">
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Hatsu Té Blanco - Mangostino 400 ML</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$10.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Hatsu Té Negro - Limón 400 ML</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$10.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Hatsu Té Amarillo - Carambolo 400 ML</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$10.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Gaseosas</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$8.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Soda</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$8.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Agua Mineral</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$6.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Agua con Gas</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$6.000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bebidas Naturales -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <h3 class="font-serif text-xl text-brandDark mb-4 border-b border-brandAccent pb-2 inline-block">Bebidas Naturales</h3>
+                <div class="space-y-3 mt-2">
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Limonada Natural</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$8.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Limonada Cerezada</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Limonada Hierbabuena</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Limonada de Lyches</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$13.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Limonada Mango Biche</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Limonada de Coco</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Frutos Rojos</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Frutos Amarillos</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sodas Italianas -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <h3 class="font-serif text-xl text-brandDark mb-4 border-b border-brandAccent pb-2 inline-block">Sodas Italianas (Sin Licor)</h3>
+                <div class="space-y-3 mt-2">
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Frutos Rojos</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Cereza Limón</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Sandía Limon</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Maracuyá</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Manzana Verde</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Mojito</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$12.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Lychee</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$13.000</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Malteadas y Helados -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <h3 class="font-serif text-xl text-brandDark mb-4 border-b border-brandAccent pb-2 inline-block">Malteadas y Helados</h3>
+                <div class="space-y-3 mt-2">
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Malteada de Vainilla</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$16.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Malteada de Frutos Rojos</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$16.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Malteada de Maracuya</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$16.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1 mt-4">
+                        <span class="font-sans text-gray-700 text-sm">Helado - Un Sabor</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Helado - Dos Sabores</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$14.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Helado - Tres Sabores</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$16.000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cervezas y Más -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <h3 class="font-serif text-xl text-brandDark mb-4 border-b border-brandAccent pb-2 inline-block">Cervezas, Vinos y Sangría</h3>
+                <div class="space-y-3 mt-2">
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Cerveza Club Dorada</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Cerveza Heineken</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Cerveza 3 Cordilleras</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$11.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Cerveza Sol</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Cerveza Peroni</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$16.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Jarra de Sangría</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$86.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Media Jarra de Sangría</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$49.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Copa de Sangría</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$20.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Copa de Vino (Tinto - Blanco - Rose)</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$19.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Rosadito de Verano</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$19.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Tinto de Verano</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$19.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Aperol Spritz</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$26.000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Café y Postres -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-shadow">
+                <h3 class="font-serif text-xl text-brandDark mb-4 border-b border-brandAccent pb-2 inline-block">Café y Postres</h3>
+                <div class="space-y-3 mt-2">
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Espresso</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$5.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Latte Caliente</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$9.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Latte Frio</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$10.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Cappuccino</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$8.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Adición - Leche de Almendras</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$3.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1 mt-4">
+                        <span class="font-sans text-gray-700 text-sm">Banano Krokante con Helado</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$14.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-dashed border-gray-100 pb-1">
+                        <span class="font-sans text-gray-700 text-sm">Torta de la Casa</span>
+                        <span class="font-sans font-bold text-brandAccent text-sm">$13.000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-16 text-center">
+            <a href="Positano.html" class="inline-block bg-brandDark text-brandLight px-8 py-3 rounded-full uppercase tracking-widest text-xs font-bold hover:bg-brandAccent hover:text-white transition-all shadow-lg">Volver al Inicio</a>
+        </div>
+    </section>
+    
+    <!-- JavaScript para Animaciones e Interacción -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById('navbar');
+            const navLinks = navbar.querySelectorAll('nav a');
+            const logoTitle = document.getElementById('logo-title');
+            const logoSubtitle = document.getElementById('logo-subtitle');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-transparent', 'md:py-6', 'py-4');
+                    navbar.classList.add('py-3');
+                    
+                    logoTitle.classList.remove('text-brandDark');
+                    logoTitle.classList.add('text-brandDark');
+                    logoSubtitle.classList.remove('text-brandDark');
+                    logoSubtitle.classList.add('text-brandDark');
+
+                    navLinks.forEach(link => {
+                        if(!link.classList.contains('bg-brandDark')) {
+                            link.classList.remove('text-brandDark', 'mix-blend-difference');
+                            link.classList.add('text-brandDark');
+                        }
+                    });
+                } else {
+                    navbar.classList.add('bg-transparent', 'md:py-6', 'py-4');
+                    navbar.classList.remove('bg-white', 'shadow-md', 'py-3');
+                    
+                    logoTitle.classList.add('text-brandDark');
+                    logoTitle.classList.remove('text-brandDark');
+                    logoSubtitle.classList.add('text-brandDark');
+                    logoSubtitle.classList.remove('text-brandDark');
+
+                    navLinks.forEach(link => {
+                        if(!link.classList.contains('bg-brandDark')) {
+                            link.classList.add('text-brandDark', 'mix-blend-difference');
+                            link.classList.remove('text-brandDark');
+                        }
+                    });
+                }
+            });
+
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            const btnMobile = document.getElementById('btn-mobile');
+            const btnClose = document.getElementById('btn-close');
+            const menuMobile = document.getElementById('menu-mobile');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (menuMobile.classList.contains('hidden')) {
+                    menuMobile.classList.remove('hidden');
+                    setTimeout(() => menuMobile.classList.remove('translate-x-full'), 10);
+                } else {
+                    menuMobile.classList.add('translate-x-full');
+                    setTimeout(() => menuMobile.classList.add('hidden'), 500);
+                }
+            }
+
+            btnMobile.addEventListener('click', toggleMenu);
+            btnClose.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+        });
+    </script>
+</body>
+</html>

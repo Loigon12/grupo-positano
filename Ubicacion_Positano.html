@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubicación | Positano Cocina Italiana Ibagué</title>
+    <meta name="description" content="Encuentra Positano Cocina Italiana en Terraza San Lorenzo, Ibagué, Tolima. Horarios, mapa y cómo llegar.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="assets/Positano/positano.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0F1F17',
+                        brandLight: '#FAFAFA',
+                        brandAccent: '#D2371E',
+                        brandMuted: '#8C938F'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        script: ['Caveat', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #FAFAFA; color: #0F1F17; }
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        @media (max-width: 768px) {
+            .parallax-bg { background-attachment: scroll; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAFAFA; }
+        ::-webkit-scrollbar-thumb { background: #0F1F17; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D2371E; }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+    <!-- Navbar Dinámico -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-500 bg-transparent py-4 md:py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="Positano.html" class="flex items-center gap-3 group">
+                    <img src="assets/Positano/positano.jpg" alt="Positano Logo" class="h-12 w-12 md:h-16 md:w-16 object-cover rounded-full shadow-md group-hover:scale-105 transition-transform duration-500 border border-brandDark/10 bg-white">
+                    <div class="flex flex-col hidden sm:flex">
+                        <span id="logo-title" class="font-script font-bold text-3xl md:text-4xl text-white transition-colors duration-500 leading-none">Positano</span>
+                        <span id="logo-subtitle" class="font-sans text-[9px] md:text-[10px] tracking-[0.3em] font-semibold text-white transition-colors duration-500 uppercase mt-1">Cocina Italiana</span>
+                    </div>
+                </a>
+
+                <nav class="hidden md:flex space-x-8 lg:space-x-10 items-center">
+                    <a href="Experiencia_Positano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandLight hover:text-brandAccent transition-colors mix-blend-difference">LA EXPERIENCIA</a>
+                    <a href="MenuPositano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandLight hover:text-brandAccent transition-colors mix-blend-difference">MENÚ</a>
+                    <a href="Ubicacion_Positano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandLight hover:text-brandAccent transition-colors mix-blend-difference">UBICACIÓN</a>
+                    <a href="Reservas_Positano.html" class="bg-brandDark text-brandLight px-6 py-2 rounded-full uppercase tracking-widest text-xs font-bold hover:bg-brandAccent hover:text-white transition-all duration-300 shadow-lg border border-transparent">Reservar</a>
+                </nav>
+
+                <button id="btn-mobile" class="md:hidden text-brandDark bg-white/90 p-2 rounded-full shadow-sm hover:text-brandAccent focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="menu-mobile" class="fixed inset-0 bg-brandLight/98 backdrop-blur-md z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center space-y-6 hidden">
+            <button id="btn-close" class="absolute top-6 right-6 text-brandDark hover:text-brandAccent p-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <a href="Experiencia_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">La Experiencia</a>
+            <a href="MenuPositano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">Menú</a>
+            <a href="Ubicacion_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">Ubicación</a>
+            <a href="Reservas_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">Reservar</a>
+            <a href="https://www.instagram.com/positano_01/" target="_blank" class="mobile-link mt-6 bg-brandDark text-brandLight px-8 py-3 rounded-full text-sm uppercase tracking-widest hover:bg-brandAccent hover:text-white transition-all">Siguenos en IG</a>
+        </div>
+    </header>
+
+    <!-- Hero de página -->
+    <section class="relative h-[70svh] min-h-[420px] flex items-center justify-center parallax-bg" style="background-image: url('assets/Positano/hero.jpg');">
+        <div class="absolute inset-0 bg-brandDark/60"></div>
+        <div class="relative z-10 text-center px-4 max-w-3xl mx-auto">
+            <span class="reveal uppercase tracking-[0.35em] text-white text-[10px] md:text-sm font-semibold mb-4 md:mb-6 block drop-shadow-md">Ibagué, Tolima</span>
+            <h1 class="reveal delay-100 font-serif text-4xl sm:text-5xl md:text-7xl text-white leading-tight drop-shadow-lg">
+                Nuestra <span class="font-script text-brandAccent text-5xl sm:text-6xl md:text-8xl font-normal lowercase">ubicación</span>
+            </h1>
+        </div>
+    </section>
+
+    <!-- Info + Mapa -->
+    <section class="bg-brandDark pt-16 md:pt-24 pb-16 md:pb-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
+                <div class="reveal flex flex-col justify-center text-center lg:text-left items-center lg:items-start">
+                    <img src="assets/Positano/positano.jpg" alt="Logo Positano" class="w-20 h-20 md:w-24 md:h-24 rounded-full mb-6 md:mb-8 opacity-90 border-2 border-white/10 bg-white object-cover">
+                    <h2 class="font-serif text-3xl md:text-4xl mb-4 md:mb-6 text-white">Ven a visitarnos</h2>
+                    <p class="text-brandMuted mb-6 md:mb-8 font-light text-sm md:text-base max-w-md">Disfruta de la mejor cocina italiana en el corazón de la ciudad. Un espacio diseñado para compartir.</p>
+
+                    <div class="space-y-4 md:space-y-6 text-gray-300 font-light text-sm md:text-base text-left">
+                        <div class="flex items-start gap-3 md:gap-4">
+                            <span class="text-brandAccent mt-1 text-lg">📍</span>
+                            <p><strong>Dirección</strong><br>Ibagué, Tolima<br>Terraza San Lorenzo</p>
+                        </div>
+                        <div class="flex items-start gap-3 md:gap-4">
+                            <span class="text-brandAccent mt-1 text-lg">🕒</span>
+                            <p><strong>Horarios</strong><br>Mar - Dom: 12:00 M. - 10:00 P.M.<br>Lunes cerrado</p>
+                        </div>
+                        <div class="flex items-start gap-3 md:gap-4">
+                            <span class="text-brandAccent mt-1 text-lg">🚗</span>
+                            <p><strong>Parqueadero</strong><br>Disponible en la zona de Terraza San Lorenzo</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 md:mt-10 flex flex-wrap gap-4">
+                        <a href="https://www.instagram.com/positano_01/" target="_blank" class="flex items-center gap-3 bg-white/5 hover:bg-brandAccent border border-white/10 px-5 md:px-6 py-2.5 md:py-3 rounded-full transition-all group shadow-lg">
+                            <svg class="w-4 h-4 md:w-5 md:h-5 text-gray-300 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase text-white">Seguir en IG</span>
+                        </a>
+                        <a href="Reservar.html" class="flex items-center gap-3 bg-brandAccent hover:bg-white hover:text-brandAccent px-5 md:px-6 py-2.5 md:py-3 rounded-full transition-all shadow-lg">
+                            <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase text-white group-hover:text-brandAccent">Reservar Mesa</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reveal delay-100 w-full h-80 md:h-full min-h-[380px] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                    <iframe
+                        src="https://maps.google.com/maps?q=4.4248673,-75.1851945&z=17&output=embed"
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="w-full h-full grayscale-[0.3] hover:grayscale-0 transition-all duration-500">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brandDark py-8 md:py-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="border-t border-white/10 pt-6 md:pt-8 text-center flex flex-col md:flex-row justify-between items-center text-[9px] md:text-[10px] text-brandMuted uppercase tracking-widest font-bold">
+                <p>&copy; 2026 Positano Cocina Italiana Ibagué. Todos los derechos reservados.</p>
+                <div class="space-x-4 md:space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors">Términos</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById('navbar');
+            const navLinks = navbar.querySelectorAll('nav a');
+            const logoTitle = document.getElementById('logo-title');
+            const logoSubtitle = document.getElementById('logo-subtitle');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-transparent', 'md:py-6', 'py-4');
+                    navbar.classList.add('py-3');
+                    logoTitle.classList.remove('text-white');
+                    logoTitle.classList.add('text-brandDark');
+                    logoSubtitle.classList.remove('text-white');
+                    logoSubtitle.classList.add('text-brandDark');
+                    navLinks.forEach(link => {
+                        if (!link.classList.contains('bg-brandDark')) {
+                            link.classList.remove('text-brandLight', 'mix-blend-difference');
+                            link.classList.add('text-brandDark');
+                        }
+                    });
+                } else {
+                    navbar.classList.add('bg-transparent', 'md:py-6', 'py-4');
+                    navbar.classList.remove('bg-white', 'shadow-md', 'py-3');
+                    logoTitle.classList.add('text-white');
+                    logoTitle.classList.remove('text-brandDark');
+                    logoSubtitle.classList.add('text-white');
+                    logoSubtitle.classList.remove('text-brandDark');
+                    navLinks.forEach(link => {
+                        if (!link.classList.contains('bg-brandDark')) {
+                            link.classList.add('text-brandLight', 'mix-blend-difference');
+                            link.classList.remove('text-brandDark');
+                        }
+                    });
+                }
+            });
+
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            const btnMobile = document.getElementById('btn-mobile');
+            const btnClose = document.getElementById('btn-close');
+            const menuMobile = document.getElementById('menu-mobile');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (menuMobile.classList.contains('hidden')) {
+                    menuMobile.classList.remove('hidden');
+                    setTimeout(() => menuMobile.classList.remove('translate-x-full'), 10);
+                } else {
+                    menuMobile.classList.add('translate-x-full');
+                    setTimeout(() => menuMobile.classList.add('hidden'), 500);
+                }
+            }
+            btnMobile.addEventListener('click', toggleMenu);
+            btnClose.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+        });
+    </script>
+</body>
+</html>

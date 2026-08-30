@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú | Astra Steak & Grill</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpg" href="astra/Astra.jpeg">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #f5f5f5; }
+        h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
+        .bg-menu-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.95)), url('https://images.unsplash.com/photo-1558030006-450675393462?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        }
+        .btn-gourmet {
+            transition: all 0.3s ease;
+            border: 1px solid #fff;
+            background: transparent;
+            color: #fff;
+        }
+        .btn-gourmet:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        /* Menu item hover effect */
+        .menu-item-line {
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-item-line::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #333;
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        .group:hover .menu-item-line::after {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-gray-700 selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-black/95 backdrop-blur-md border-b border-gray-900 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                 <div class="flex-shrink-0 flex items-center gap-4">
+                   <a href="Astra.html">
+                     <img class="h-16 w-16 object-contain rounded-full bg-white p-1 shadow-lg" src="assets/Astra.jpeg" alt="Astra Logo">
+                   </a>
+                   <div class="flex flex-col mt-1">
+                        <span class="font-serif text-2xl tracking-widest uppercase text-white leading-none">Astra</span>
+                        <span class="text-[9px] md:text-[10px] tracking-[0.25em] uppercase text-gray-400 mt-1.5">Steak & Grill</span>
+                   </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="Astra.html" class="text-xs uppercase tracking-widest text-gray-400 hover:text-white transition">Inicio</a>
+                    <a href="Experiencia_Astra.html" class="text-xs uppercase tracking-widest text-gray-400 hover:text-white transition">Experiencia</a>
+                    <a href="Astra_Menu.html" class="text-xs uppercase tracking-widest text-white border-b border-white pb-1">Menú</a>
+                    <a href="Reservas_Astra.html" class="text-xs uppercase tracking-widest text-gray-400 hover:text-white transition">Reservas</a>
+                    <a href="Contacto_Astra.html" class="text-xs uppercase tracking-widest text-gray-400 hover:text-white transition">Contacto</a>
+                </div>
+
+                <!-- Hamburger Button (Mobile) -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-400 hover:text-white focus:outline-none transition">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-lg z-[60] flex flex-col items-center justify-center space-y-8 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+        <!-- Close Button -->
+        <button id="close-menu-btn" class="absolute top-8 right-6 text-gray-400 hover:text-white focus:outline-none transition">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        
+        <img class="h-20 w-20 object-contain rounded-full bg-white p-1 shadow-lg mb-4" src="assets/Astra.jpeg" alt="Astra Logo">
+        
+        <a href="Astra.html" class="mobile-link text-lg uppercase tracking-widest text-gray-300 hover:text-white transition">Inicio</a>
+        <a href="Experiencia_Astra.html" class="mobile-link text-lg uppercase tracking-widest text-gray-300 hover:text-white transition">Experiencia</a>
+        <a href="Astra_Menu.html" class="mobile-link text-lg uppercase tracking-widest text-white border-b border-white pb-1">Menú</a>
+        <a href="Reservas_Astra.html" class="mobile-link text-lg uppercase tracking-widest text-gray-300 hover:text-white transition">Reservas</a>
+        <a href="Contacto_Astra.html" class="mobile-link text-lg uppercase tracking-widest text-gray-300 hover:text-white transition">Contacto</a>
+    </div>
+
+    <!-- Menu Hero -->
+    <section class="bg-menu-hero pt-40 pb-20 flex items-center justify-center text-center border-b border-gray-900">
+        <div class="px-4">
+            <h1 class="text-4xl md:text-6xl font-serif mb-4 uppercase tracking-widest text-white drop-shadow-lg">La Carta</h1>
+            <div class="h-px w-24 bg-gray-600 mx-auto mb-6"></div>
+            <p class="text-sm text-gray-400 tracking-[0.2em] uppercase">Selección de autor</p>
+        </div>
+    </section>
+
+    <!-- Menu Content -->
+    <section class="py-24 bg-[#0a0a0a]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Entradas -->
+            <div class="mb-24">
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-10 uppercase tracking-widest text-center text-white">Entradas</h2>
+                <div class="grid md:grid-cols-2 gap-x-16 gap-y-10">
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Morcilla</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$20.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Morcillas artesanales acompañadas de arepa y guacamole.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Chinchulines</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$20.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Chinchulines acompañados de papa criolla y guacamole.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Chorizo Artesanal</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$24.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Chorizos artesanales acompañados de arepa y chimichurri.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Tacos de Lomo x3</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$29.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Tortilla de maiz X3, lomo de res madurado, cebolla encurtida, queso flameado, acompañado de guacamole.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Burger Lab -->
+            <div class="mb-24">
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-10 uppercase tracking-widest text-center text-white">Burger Lab</h2>
+                <div class="grid md:grid-cols-2 gap-x-16 gap-y-10">
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex flex-wrap justify-between items-baseline mb-2">
+                            <div class="flex items-center gap-3">
+                                <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">White Tiger Burger</h4>
+                                <span class="text-[9px] border border-gray-600 text-gray-400 px-2 py-0.5 uppercase tracking-wider">Certified Angus Beef</span>
+                            </div>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$34.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan prezzel, salsa de la casa, blend artesanal de Angus certificado, queso cheddar, cremoso de salsa entrecot a base de queso philadelphia, cebolla encurtida para darle ese toque de dulce que no te puedes resistir, Krokante de papa artesanal. Acompañada de papa a la francesa.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex flex-wrap justify-between items-baseline mb-2">
+                            <div class="flex items-center gap-3">
+                                <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Sweet Creamburger</h4>
+                                <span class="text-[9px] border border-gray-600 text-gray-400 px-2 py-0.5 uppercase tracking-wider">Certified Angus Beef</span>
+                            </div>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$35.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan prezzel o brioche, salsa de la casa, blend artesanal Angus certificado, queso cheddar, tocineta, cremoso de queso Philadelphia, mermelada de mango-pimentón y coronado con un Krokante de plátano verde. Acompañada con papa a la francesa.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex flex-wrap justify-between items-baseline mb-2">
+                            <div class="flex items-center gap-3">
+                                <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Gaucha Burger</h4>
+                                <span class="text-[9px] border border-gray-600 text-gray-400 px-2 py-0.5 uppercase tracking-wider">Certified Angus Beef</span>
+                            </div>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$34.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan prezzel o brioche, blend artesanal de Angus certificado, queso cheddar, bondiola ahumada, chimichurri de la casa, pepinillos y platanito caramelizado. Acompañada con papa a la francesa.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex flex-wrap justify-between items-baseline mb-2">
+                            <div class="flex items-center gap-3">
+                                <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Roma Burger</h4>
+                                <span class="text-[9px] border border-gray-600 text-gray-400 px-2 py-0.5 uppercase tracking-wider">Certified Angus Beef</span>
+                            </div>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$34.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan prezzel o brioche, blend artesanal de Angus certificado, queso cheddar, aderezo cremoso de trufa y queso Philadelphia, champiñones salteado, pepinillos y un Krokante de cebolla crispy. Acompañada con papa a la francesa.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex flex-wrap justify-between items-baseline mb-2">
+                            <div class="flex items-center gap-3">
+                                <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Classic Burger</h4>
+                                <span class="text-[9px] border border-gray-600 text-gray-400 px-2 py-0.5 uppercase tracking-wider">Certified Angus Beef</span>
+                            </div>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$30.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan brioche, Blend artesanal de Angus certificado, queso cheddar, tomate fresco, cogollo europeo, cebolla fresca y pepinillo. Acompañada de papa a la francesa.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex flex-wrap justify-between items-baseline mb-2">
+                            <div class="flex items-center gap-3">
+                                <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Smashburger</h4>
+                                <span class="text-[9px] border border-gray-600 text-gray-400 px-2 py-0.5 uppercase tracking-wider">Certified Angus Beef</span>
+                            </div>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$34.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan prezzel o brioche, salsa de la casa, pepinillos, doble blend smash artesanal de Angus certificado, doble queso cheddar, tocineta y cebolla en reducción de vino tinto y tamarindo. Acompañada de papa a la francesa.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Chicken Burger</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$30.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan brioche, pechuga de pollo apanado, queso cheddar, salsa BBQ, cogollo europeo, pepinillos y tomate verde. Acompañada de papa a la francesa.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Camarón Burger</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$35.900</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Pan brioche, blend artesanal de camarón, cebolla encurtida, queso mozzarella apanado y cremoso de leche de tigre - suero costeño crema agria. Acompañada de papa a la francesa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parrilla -->
+            <div class="mb-24">
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-6 uppercase tracking-widest text-center text-white">Parrilla</h2>
+                <div class="text-center mb-12">
+                    <p class="text-xs text-gray-400 tracking-widest uppercase mb-2">Acompañantes</p>
+                    <p class="text-sm text-gray-500 font-light">Puedes elegir 2 de los siguientes acompañantes:<br>Papa al horno, Papa en casco, Ensalada del huerto, Vegetales Salteados.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-x-16 gap-y-12">
+                    <!-- Res -->
+                    <div>
+                        <h3 class="text-xl font-serif border-b border-gray-800 pb-2 mb-6 uppercase tracking-widest text-gray-300">Res</h3>
+                        <div class="space-y-6">
+                            <div class="group cursor-pointer menu-item-line pb-2">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Churrasco</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$47.000</span>
+                                </div>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-2">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Bife Chorizo</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$48.000</span>
+                                </div>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-2">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Punta de Anca</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$49.000</span>
+                                </div>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-2">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Baby Beef</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$56.000</span>
+                                </div>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Entrecot Parisino</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$45.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Corte de carne vacuno fileteado, bañado por nuestra salsa de la casa, al mejor estilo parisino. Acompañado de papa a la francesa.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Lomo "Raices"</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$56.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Medallones de lomo fino de res, guacamole, plátano maduro caramelizado, chimichurri y papas en casco.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Lomo Acevichado</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$58.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Medallones lomo fino sobre una base de plátano maduro, coronado con ceviche cremoso de la casa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cerdo, Pollo y Parrillada -->
+                    <div class="space-y-12">
+                        <!-- Cerdo -->
+                        <div>
+                            <h3 class="text-xl font-serif border-b border-gray-800 pb-2 mb-6 uppercase tracking-widest text-gray-300">Cerdo</h3>
+                            <div class="space-y-6">
+                                <div class="group cursor-pointer menu-item-line pb-2">
+                                    <div class="flex justify-between items-baseline">
+                                        <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Lomo de Cerdo</h4>
+                                        <span class="text-gray-400 font-light text-sm tracking-widest">$40.000</span>
+                                    </div>
+                                </div>
+                                <div class="group cursor-pointer menu-item-line pb-2">
+                                    <div class="flex justify-between items-baseline">
+                                        <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Bondiola</h4>
+                                        <span class="text-gray-400 font-light text-sm tracking-widest">$42.000</span>
+                                    </div>
+                                </div>
+                                <div class="group cursor-pointer menu-item-line pb-4">
+                                    <div class="flex justify-between items-baseline mb-1">
+                                        <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Costillas de Cerdo BBQ de Tamarindo</h4>
+                                        <span class="text-gray-400 font-light text-sm tracking-widest">$45.000</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 font-light">Costilla ahumada en salsa BBQ de tamarindo. Acompañado de mazorca, papa en casco artesanal o papa criolla.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pollo -->
+                        <div>
+                            <h3 class="text-xl font-serif border-b border-gray-800 pb-2 mb-6 uppercase tracking-widest text-gray-300">Pollo</h3>
+                            <div class="space-y-6">
+                                <div class="group cursor-pointer menu-item-line pb-4">
+                                    <div class="flex justify-between items-baseline mb-1">
+                                        <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Pollo "Raices"</h4>
+                                        <span class="text-gray-400 font-light text-sm tracking-widest">$45.000</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 font-light">Pollo parrillado, acompañado de guacamole, plátano maduro caramelizado, chimichurri y papa en casco.</p>
+                                </div>
+                                <div class="group cursor-pointer menu-item-line pb-4">
+                                    <div class="flex justify-between items-baseline mb-1">
+                                        <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Pollo en Salsa de Champiñones</h4>
+                                        <span class="text-gray-400 font-light text-sm tracking-widest">$46.000</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 font-light">Pollo parrillado, en salsa de champiñones salteados, acompañado de puré de papa, vegetales salteados o ensalada fresca.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Parrillada -->
+                        <div>
+                            <h3 class="text-xl font-serif border-b border-gray-800 pb-2 mb-6 uppercase tracking-widest text-gray-300">Para Compartir</h3>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Parrillada</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$65.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Res, pollo, bondiola de cerdo ahumada, morcilla, chorizo artesanal, papa criolla, platano maduro. Acompañado de guacamole y chinichurri.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bowls & Arroces -->
+            <div class="mb-24">
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-10 uppercase tracking-widest text-center text-white">Bowls & Arroces</h2>
+                
+                <div class="grid md:grid-cols-2 gap-x-16 gap-y-12">
+                    <!-- Bowls -->
+                    <div>
+                        <h3 class="text-xl font-serif border-b border-gray-800 pb-2 mb-4 uppercase tracking-widest text-gray-300">Bowls</h3>
+                        <div class="mb-6">
+                            <p class="text-xs text-gray-400 font-light mb-1"><strong class="uppercase tracking-widest text-gray-300">Bases:</strong> Arroz, mix de lechuga, vegetales salteado.</p>
+                            <p class="text-xs text-gray-400 font-light"><strong class="uppercase tracking-widest text-gray-300">Acompañantes:</strong> Queso mozzarella, plátano maduro, guacamole, tomate cherry, pepino, cebolla encurtida, pepinillo encurtido, rábano, chimichurri.</p>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Bowl de Lomo</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$39.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Lomo fino madurado, una base y tres acompañamientos a elección.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Bowl de Pollo</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$38.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Pollo parrillado o Pollo apanado Krokante, una base y tres acompañamientos a elección.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arroces -->
+                    <div>
+                        <h3 class="text-xl font-serif border-b border-gray-800 pb-2 mb-6 uppercase tracking-widest text-gray-300">Arroces</h3>
+                        <div class="space-y-6">
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Arroz Marisquero</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$48.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Base de salsa de ostiones, mariscos y vegetales salteados. Acompañado de chips de plátano.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Arroz Mixto</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$45.000</span>
+                                </div>
+                                <p class="text-sm text-gray-500 font-light">Base de salsa de la casa, res, pollo parrillado, chorizo artesanal y vegetales salteados. Acompañado de chips de plátano.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Camarones & Pescado -->
+            <div class="mb-24">
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-10 uppercase tracking-widest text-center text-white">Camarones & Pescado</h2>
+                <div class="grid md:grid-cols-2 gap-x-16 gap-y-10">
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Salmon a la Plancha</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$49.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Filete de salmón, acompañado de vegetales salteados o ensalada del huerto y puré de papa o papa en casco.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Salmon Acevichado</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$62.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Filete de salmón, coronado con ceviche cremoso de la casa. Acompañado de vegetales salteados o ensalada del huerto y puré de papa o papa en casco.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Ceviche Astra</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$39.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Camarón, Calamar, pescado blanco, en suero costeño, crema agria y leche de tigre, cilantro, coronado con plátano maduro caramelizado y salsa criolla. Acompañado de chips de plátano.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Mariscos Krokantes</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$46.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Camarónes apanados acompañados de papa en casco.</p>
+                    </div>
+                    <div class="group cursor-pointer menu-item-line pb-4">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h4 class="text-lg font-serif text-white group-hover:text-gray-300 transition">Mixtos</h4>
+                            <span class="text-gray-400 font-light text-sm tracking-widest">$46.000</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-light pr-8">Camaron, calamar y pescado blanco apanados, acompañado de papa en casco.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Postres -->
+            <div class="mb-24">
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-10 uppercase tracking-widest text-center text-white">Postres</h2>
+                <div class="grid md:grid-cols-2 gap-x-16 gap-y-6">
+                    <div class="flex justify-between items-baseline border-b border-gray-800 pb-2">
+                        <h4 class="font-serif text-white text-base">Churros con Arequipe</h4>
+                        <span class="text-gray-400 font-light text-sm tracking-widest">$19.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-gray-800 pb-2">
+                        <h4 class="font-serif text-white text-base">Churros con Arequipe Media Porción</h4>
+                        <span class="text-gray-400 font-light text-sm tracking-widest">$11.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-gray-800 pb-2">
+                        <h4 class="font-serif text-white text-base">Malteada de Frutos Rojos</h4>
+                        <span class="text-gray-400 font-light text-sm tracking-widest">$16.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-gray-800 pb-2">
+                        <h4 class="font-serif text-white text-base">Malteada de Maracuya</h4>
+                        <span class="text-gray-400 font-light text-sm tracking-widest">$16.000</span>
+                    </div>
+                    <div class="flex justify-between items-baseline border-b border-gray-800 pb-2">
+                        <h4 class="font-serif text-white text-base">Malteada de Vainilla</h4>
+                        <span class="text-gray-400 font-light text-sm tracking-widest">$16.000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bebidas -->
+            <div class="mb-24">
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-10 uppercase tracking-widest text-center text-white">Bebidas</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    
+                    <!-- Cervezas -->
+                    <div>
+                        <h3 class="text-lg font-serif border-b border-gray-800 pb-2 mb-4 uppercase tracking-widest text-gray-300">Cervezas</h3>
+                        <ul class="space-y-3 text-gray-400 font-light text-sm">
+                            <li class="flex justify-between"><span>Heiniken</span> <span>$10.000</span></li>
+                            <li class="flex justify-between"><span>Tres Cordilleras Rosada</span> <span>$12.000</span></li>
+                            <li class="flex justify-between"><span>Club Colombia</span> <span>$9.000</span></li>
+                            <li class="flex justify-between"><span>Corona</span> <span>$10.000</span></li>
+                            <li class="flex justify-between"><span>Stella Artois</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Estrella Galicia</span> <span>$18.000</span></li>
+                            <li class="flex justify-between"><span>Liefmans Frutiese</span> <span>$25.000</span></li>
+                            <li class="flex justify-between"><span>Erdinger Weissbier</span> <span>$30.000</span></li>
+                            <li class="flex justify-between"><span>Erdinger Dunkel</span> <span>$30.000</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Jugos & Limonadas -->
+                    <div>
+                        <h3 class="text-lg font-serif border-b border-gray-800 pb-2 mb-4 uppercase tracking-widest text-gray-300">Jugos</h3>
+                        <ul class="space-y-3 text-gray-400 font-light text-sm mb-8">
+                            <li class="flex justify-between"><span>Mango Mandarina</span> <span>$14.000</span></li>
+                            <li class="flex justify-between"><span>Maracumango</span> <span>$14.000</span></li>
+                        </ul>
+                        <h3 class="text-lg font-serif border-b border-gray-800 pb-2 mb-4 uppercase tracking-widest text-gray-300">Limonadas</h3>
+                        <ul class="space-y-3 text-gray-400 font-light text-sm">
+                            <li class="flex justify-between"><span>Natural</span> <span>$9.000</span></li>
+                            <li class="flex justify-between"><span>Lyche</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Coco</span> <span>$14.000</span></li>
+                            <li class="flex justify-between"><span>Cereza</span> <span>$13.000</span></li>
+                            <li class="flex justify-between"><span>Mango Biche</span> <span>$14.000</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Te & Gaseosas -->
+                    <div>
+                        <h3 class="text-lg font-serif border-b border-gray-800 pb-2 mb-4 uppercase tracking-widest text-gray-300">Té & Gaseosas</h3>
+                        <ul class="space-y-3 text-gray-400 font-light text-sm">
+                            <li class="flex justify-between"><span>Te Hatsu Lila</span> <span>$8.000</span></li>
+                            <li class="flex justify-between"><span>Te Hatsu Blanco</span> <span>$8.000</span></li>
+                            <li class="flex justify-between"><span>Te Hatsu Negro</span> <span>$8.000</span></li>
+                            <li class="flex justify-between"><span>Ginger Canada Dry</span> <span>$8.000</span></li>
+                            <li class="flex justify-between"><span>Agua Hatsu Con Gas</span> <span>$6.000</span></li>
+                            <li class="flex justify-between"><span>Agua Hatsu Sin Gas</span> <span>$6.000</span></li>
+                            <li class="flex justify-between"><span>Soda Bretaña</span> <span>$6.000</span></li>
+                            <li class="flex justify-between"><span>Coca-Original</span> <span>$6.000</span></li>
+                            <li class="flex justify-between"><span>Coca-Cola Zero</span> <span>$6.000</span></li>
+                            <li class="flex justify-between"><span>Electrolit</span> <span>$12.000</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sodificadas -->
+                    <div>
+                        <h3 class="text-lg font-serif border-b border-gray-800 pb-2 mb-4 uppercase tracking-widest text-gray-300">Sodificadas</h3>
+                        <ul class="space-y-3 text-gray-400 font-light text-sm">
+                            <li class="flex justify-between"><span>Lyhes</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Tamarindo Hierbabuena</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Kiwi</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Maracuya</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Frutos Rojos</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Sandia Limon</span> <span>$15.000</span></li>
+                            <li class="flex justify-between"><span>Mora Azul</span> <span>$15.000</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coctelería -->
+            <div>
+                <h2 class="text-2xl md:text-3xl font-serif border-b-2 border-gray-800 pb-4 mb-10 uppercase tracking-widest text-center text-white">Coctelería</h2>
+                
+                <div class="grid md:grid-cols-2 gap-x-16 gap-y-12">
+                    
+                    <!-- Cocteles de Autor -->
+                    <div>
+                        <h3 class="text-xl font-serif border-b border-gray-800 pb-4 mb-8 uppercase tracking-widest text-gray-300">Cocteles de Autor</h3>
+                        <div class="space-y-6">
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Impostor</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$35.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Jägermeister, Jack Daniel's, Vermouth Rosso, Banano. Una pizca de dulzura y un bello engaño.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Mieles de Feijoa</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$35.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Jack Daniel's Honey, feijoa, ginger. Refrescante, amigable con un sabor indescriptible.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Raices de Mi Tierra</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$30.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Aguardiente, Licor de Maracuya, piña. De la tierra de cantores y Bambucos.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Crema de Jager</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$36.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Baileys, Jägermeister, Chocolate. Dulce, cremoso.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Chocolate y Uvas</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$30.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Ron añejo, vinotinto, Chocolate 85%.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Cantarito al Estilo Astra</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$46.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Tequila, Toronja, Limon, escarchado con Chamoy y Tajin.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Un Marino es, Ante Todo, Un Caballero</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$35.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Ron Añejo, jagermeister, Piña, Mandarina, cerezas.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Roncito de Playa</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$30.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Ron puro colombia, miel de piña, agua de coco, limon. Pensado en lo fresca y relajante que es la playa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coctelería Clásica & Sangría -->
+                    <div>
+                        <h3 class="text-xl font-serif border-b border-gray-800 pb-4 mb-8 uppercase tracking-widest text-gray-300">Coctelería Clásica</h3>
+                        <div class="space-y-6 mb-12">
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Margarita</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$35.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Tequila centenario plata, triple sec, limon.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Aperol Spritz</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$30.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Aperol, Prosecco, soda.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Mojito</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$26.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Ron Bacardi carta blanca, limon, azúcar, soda.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Gin & Tonic</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$38.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Gin de preferencia, agua tonica, botanicos.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Whisky Sour</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$30.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Whisky, limón, syrup simple, clara de huevo.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Negroni</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$35.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Gin, Vermouth rosso, campari.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Cuba Libre</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$30.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Ron Havana Club 7 años, limón, coca cola.</p>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Saint Germain Spritz</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$46.000</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-light">Saint Germain, Espumante, soda.</p>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-serif border-b border-gray-800 pb-4 mb-8 uppercase tracking-widest text-gray-300">Sangría & Vinos</h3>
+                        <div class="space-y-6">
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex flex-col mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition mb-2">Sangría Vino Tinto</h4>
+                                    <p class="text-xs text-gray-500 font-light mb-2">Manzana, fresas, Jack Daniel's y Ron.</p>
+                                    <div class="flex gap-4 text-gray-400 font-light text-[11px] tracking-widest uppercase">
+                                        <span>Copa $35.000</span>
+                                        <span>Media Jarra $58.000</span>
+                                        <span>Jarra $105.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex flex-col mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition mb-2">Sangría Rosse</h4>
+                                    <p class="text-xs text-gray-500 font-light mb-2">Lyches, Fresas, Arandanos, Naranja, Licor de lyches, Vodka Sky.</p>
+                                    <div class="flex gap-4 text-gray-400 font-light text-[11px] tracking-widest uppercase">
+                                        <span>Copa $35.000</span>
+                                        <span>Media Jarra $58.000</span>
+                                        <span>Jarra $105.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group cursor-pointer menu-item-line pb-4">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="text-base font-serif text-white group-hover:text-gray-300 transition">Copa de Vino Tinto / Rosse / Blanco</h4>
+                                    <span class="text-gray-400 font-light text-sm tracking-widest">$35.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+<!-- Apartado para moviles -->    
+ <section class="bg-[#050505] py-24 px-4 text-center md:hidden">
+        <h2 class="text-2xl font-serif mb-6 uppercase tracking-widest text-white">Descubre nuestra experiencia</h2>
+<button id="hero-services-btn" class="btn-gourmet px-10 py-4 text-xs tracking-[0.2em] uppercase inline-block cursor-pointer">Experimenta</button>
+ </section>
+
+<!-- Footer / Contact -->
+    <footer class="bg-[#050505] pt-24 pb-12 border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-12 mb-20 text-center md:text-left">
+            <div>
+                <div class="flex flex-col items-center md:items-start mb-6">
+                    <div class="flex items-center gap-4 mb-2">
+                        <img class="h-12 w-12 object-contain rounded-full bg-white p-1" src="assets/Astra/Astra.jpeg" alt="Astra Logo">
+                        <span class="font-serif text-xl tracking-widest uppercase text-white">Astra</span>
+                    </div>
+                    <span class="text-[10px] tracking-[0.25em] uppercase text-gray-500 ml-0 md:ml-16">Steak & Grill</span>
+                </div>
+                <p class="text-gray-500 font-light text-sm leading-loose mt-4">Experiencias foodies, fuego y técnica.<br>La casa del tigre blanco en Ibagué.</p>
+            </div>
+            <div>
+                <h4 class="font-serif text-sm mb-6 uppercase tracking-widest text-white">Enlaces Rápidos</h4>
+                <ul class="space-y-3 font-light text-sm">
+                    <li><a href="Astra.html" class="text-gray-500 hover:text-white transition">Inicio</a></li>
+                    <li><a href="Experiencia_Astra.html" class="text-gray-500 hover:text-white transition">Experiencia</a></li>
+                    <li><a href="Astra_Menu.html" class="text-gray-500 hover:text-white transition">Menú</a></li>
+                    <li><a href="Reservas_Astra.html" class="text-gray-500 hover:text-white transition">Reservas</a></li>
+                    <li><a href="Contacto_Astra.html" class="text-gray-500 hover:text-white transition">Contacto</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif text-sm mb-6 uppercase tracking-widest text-white">Ubicación</h4>
+                <p class="text-gray-500 font-light mb-1 text-sm">Calle 41 #4B-25</p>
+                <p class="text-gray-500 font-light mb-1 text-sm">Macarena Parte Alta</p>
+                <p class="text-gray-500 font-light text-sm">Ibagué, Tolima, Colombia</p>
+            </div>
+            <div>
+                <h4 class="font-serif text-sm mb-6 uppercase tracking-widest text-white">Contacto</h4>
+                <p class="text-gray-500 font-light mb-1 text-sm">Reservas: +57 (316) 040-7751</p>
+                <div class="flex justify-center md:justify-start space-x-6 mt-8">
+                    <a href="#" class="text-xs uppercase tracking-widest text-gray-600 hover:text-white transition">Instagram</a>
+                    <a href="#" class="text-xs uppercase tracking-widest text-gray-600 hover:text-white transition">Facebook</a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-700 text-[10px] tracking-[0.2em] uppercase border-t border-gray-900 pt-10">
+            &copy; 2026 Astra Steak & Grill. Todos los derechos reservados.
+        </div>
+    </footer>
+
+
+    <!-- Script Hamburguesa Móvil -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        closeMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMobileMenu);
+        });
+        
+        // Logica para el botón "Nuestros servicios" en la sección de móviles
+        const heroServicesBtn = document.getElementById('hero-services-btn');
+        heroServicesBtn.addEventListener('click', () => {
+            window.location.href = 'Experiencia_Astra.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Positano | Cocina Italiana & Pizzería en Ibagué</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="assets/Positano/positano.jpg ">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0F1F17',
+                        brandLight: '#FAFAFA',
+                        brandAccent: '#D2371E',
+                        brandMuted: '#8C938F'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        script: ['Caveat', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #FAFAFA; color: #0F1F17; }
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        @media (max-width: 768px) {
+            .parallax-bg { background-attachment: scroll; }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAFAFA; }
+        ::-webkit-scrollbar-thumb { background: #0F1F17; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D2371E; }
+        
+        /* Ocultar scroll cuando el modal está abierto */
+        body.modal-open { overflow: hidden; }
+
+/* Bloquear scroll mientras carga */
+body.loading-active {
+    overflow: hidden;
+}
+
+/* Contenedor del Loader a prueba de fallos */
+#positano-loader {
+    background-color: #FAFAFA;
+    transition: opacity 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
+    z-index: 99999;
+}
+
+/* Ocultar y desactivar por completo */
+.loader-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(-100%);
+}
+
+/* Animación de entrada suave para el logo */
+.logo-zoom {
+    animation: gentleZoom 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes gentleZoom {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Dibujo del círculo SVG (Perímetro de un radio de 48 = ~302) */
+.draw-circle {
+    stroke-dasharray: 302;
+    stroke-dashoffset: 302;
+    animation: drawCircle 1.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes drawCircle {
+    to { stroke-dashoffset: 0; }
+}
+
+/* Revelado de texto tipo máscara */
+.text-reveal-mask {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    animation: revealUp 1s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
+}
+
+@keyframes revealUp {
+    to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* Menú de opciones en pantalla de carga */
+.loader-menu-item {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: loaderMenuIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes loaderMenuIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+.loader-skip {
+    opacity: 0;
+    animation: loaderMenuIn 0.7s ease forwards;
+    animation-delay: 1.9s;
+}
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+<!-- Pantalla de Carga Original Positano -->
+<div id="positano-loader" class="fixed inset-0 flex flex-col items-center justify-center px-6 py-10 overflow-y-auto">
+    
+    <!-- Contenedor del Círculo Animado y Logo -->
+    <div class="relative flex items-center justify-center w-40 h-40 md:w-56 md:h-56 mb-4 md:mb-6 shrink-0">
+        
+        <!-- SVG que simula el trazo de un plato/pizza -->
+        <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+            <!-- Círculo base (Gris tenue) -->
+            <circle cx="50" cy="50" r="48" fill="none" stroke="#E5E7EB" stroke-width="1" />
+            <!-- Círculo animado (Acento rojo) -->
+            <circle class="draw-circle" cx="50" cy="50" r="48" fill="none" stroke="#D2371E" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        
+        <!-- Logo Positano -->
+        <img src="assets/Positano/positano.jpg" alt="Positano Cocina Italiana" class="w-28 md:w-40 h-auto object-contain logo-zoom border border-brandDark/10 rounded-full shadow-lg bg-white p-1">
+    </div>
+
+    <!-- Texto inmersivo con enmascaramiento -->
+    <div class="overflow-hidden p-2 shrink-0">
+        <h2 class="font-script text-2xl md:text-4xl text-brandDark text-reveal-mask transform translate-y-2 opacity-90">
+            Preparando la leña...
+        </h2>
+    </div>
+
+    <!-- Menú de opciones a pantalla completa -->
+    <nav class="w-full max-w-md md:max-w-2xl mt-6 md:mt-10 shrink-0" aria-label="Accesos rápidos">
+        <div class="grid grid-cols-2 gap-3 md:gap-5">
+            <a href="MenuPositano.html" class="loader-menu-item group flex flex-col items-center justify-center text-center gap-1 py-5 md:py-7 rounded-2xl border border-brandDark/10 bg-white/60 hover:bg-brandDark hover:border-brandDark transition-all duration-300" style="animation-delay: 1.1s;">
+                <span class="font-sans text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] text-brandDark group-hover:text-white transition-colors">Menú</span>
+            </a>
+            <a href="Experiencia_Positano.html" class="loader-menu-item loader-menu-link group flex flex-col items-center justify-center text-center gap-1 py-5 md:py-7 rounded-2xl border border-brandDark/10 bg-white/60 hover:bg-brandDark hover:border-brandDark transition-all duration-300" style="animation-delay: 1.3s;">
+                <span class="font-sans text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] text-brandDark group-hover:text-white transition-colors">Experiencia</span>
+            </a>
+            <a href="Ubicacion_Positano.html" class="loader-menu-item loader-menu-link group flex flex-col items-center justify-center text-center gap-1 py-5 md:py-7 rounded-2xl border border-brandDark/10 bg-white/60 hover:bg-brandDark hover:border-brandDark transition-all duration-300" style="animation-delay: 1.5s;">
+                <span class="font-sans text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] text-brandDark group-hover:text-white transition-colors">Ubicación</span>
+            </a>
+            <a href="Reservas_Positano.html" class="loader-menu-item loader-menu-link group flex flex-col items-center justify-center text-center gap-1 py-5 md:py-7 rounded-2xl border border-brandAccent/40 bg-brandAccent/5 hover:bg-brandAccent hover:border-brandAccent transition-all duration-300" style="animation-delay: 1.7s;">
+                <span class="font-sans text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] text-brandAccent group-hover:text-white transition-colors">Reservar</span>
+            </a>
+        </div>
+
+        <button id="loader-skip" class="loader-skip w-full text-center mt-5 md:mt-7 text-[10px] md:text-xs uppercase tracking-[0.25em] font-semibold text-brandMuted hover:text-brandAccent transition-colors">
+            Explorar el sitio →
+        </button>
+    </nav>
+</div>
+    <!-- Navbar Dinámico -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-500 bg-transparent py-4 md:py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="Positano.html" class="flex items-center gap-3 group">
+                    <img src="assets/Positano/positano.jpg" alt="Positano Logo" class="h-12 w-12 md:h-16 md:w-16 object-cover rounded-full shadow-md group-hover:scale-105 transition-transform duration-500 border border-brandDark/10 bg-white">
+                    <div class="flex flex-col hidden sm:flex">
+                        <span id="logo-title" class="font-script font-bold text-3xl md:text-4xl text-white transition-colors duration-500 leading-none">Positano</span>
+                        <span id="logo-subtitle" class="font-sans text-[9px] md:text-[10px] tracking-[0.3em] font-semibold text-white transition-colors duration-500 uppercase mt-1">Cocina Italiana</span>
+                    </div>
+                </a>
+
+                <!-- Enlaces Desktop -->
+                <nav class="hidden md:flex space-x-8 lg:space-x-10 items-center">
+                    <a href="Experiencia_Positano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandLight hover:text-brandAccent transition-colors mix-blend-difference">LA EXPERIENCIA</a>
+                    <a href="MenuPositano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandLight hover:text-brandAccent transition-colors mix-blend-difference">MENÚ</a>
+                    <a href="Ubicacion_Positano.html" class="text-xs lg:text-sm font-semibold tracking-widest text-brandLight hover:text-brandAccent transition-colors mix-blend-difference">UBICACIÓN</a>
+                    <a href="Positano.html#reservas" class="bg-brandDark text-brandLight px-6 py-2 rounded-full uppercase tracking-widest text-xs font-bold hover:bg-brandAccent hover:text-white transition-all duration-300 shadow-lg border border-transparent">Reservar</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="btn-mobile" class="md:hidden text-brandDark bg-white/90 p-2 rounded-full shadow-sm hover:text-brandAccent focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Móvil Desplegable -->
+        <div id="menu-mobile" class="fixed inset-0 bg-brandLight/98 backdrop-blur-md z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center space-y-6 hidden">
+            <button id="btn-close" class="absolute top-6 right-6 text-brandDark hover:text-brandAccent p-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <a href="Experiencia_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">La Experiencia</a>
+            <a href="MenuPositano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">Menú</a>
+            <a href="Ubicacion_Positano.html" class="mobile-link font-serif text-2xl text-brandDark hover:text-brandAccent transition-colors">Ubicación</a>
+            <a href="https://www.instagram.com/positano_01/" target="_blank" class="mobile-link mt-6 bg-brandDark text-brandLight px-8 py-3 rounded-full text-sm uppercase tracking-widest hover:bg-brandAccent hover:text-white transition-all">Siguenos en IG</a>
+        </div>
+    </header>
+
+    <!-- Hero Section con Parallax Puro -->
+    <section class="relative h-[100svh] flex items-center justify-center parallax-bg" style="background-image: url('assets/Positano/hero.jpg');">
+        <div class="absolute inset-0 bg-brandDark/50"></div>
+        
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center mt-12 md:mt-0">
+            <span class="reveal uppercase tracking-[0.3em] md:tracking-[0.4em] text-white text-[10px] md:text-sm font-semibold mb-4 md:mb-6 drop-shadow-md">Un pedacito de Italia en Colombia</span>
+            <h1 class="reveal delay-100 font-serif text-5xl sm:text-6xl md:text-8xl text-white mb-4 md:mb-6 leading-tight drop-shadow-lg px-2">
+                La Vera <span class="font-script text-brandAccent text-6xl sm:text-7xl md:text-9xl font-normal lowercase pr-2 md:pr-4">italia</span>
+            </h1>
+            <p class="reveal delay-200 text-base md:text-xl text-gray-100 mb-8 md:mb-10 max-w-xl md:max-w-2xl font-light drop-shadow px-4">
+                Masa madre, ingredientes frescos y nuestra pasión horneada a la leña. Vive la auténtica experiencia italiana.
+            </p>
+            <a href="MenuPositano.html" class="reveal delay-300 bg-brandAccent text-white px-6 md:px-8 py-3 md:py-4 rounded-full uppercase tracking-widest text-xs md:text-sm font-bold shadow-[0_10px_30px_rgba(210,55,30,0.4)] hover:bg-white hover:text-brandAccent transition-all transform hover:-translate-y-1">
+                Menú
+            </a>
+        </div>
+        
+        <!-- Indicador de Scroll animado -->
+        <div class="absolute bottom-8 md:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-5 h-5 md:w-6 md:h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Sección Experiencia -->
+    <section id="experiencia" class="py-16 md:py-24 bg-brandLight relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-10 md:gap-16">
+                <div class="w-full lg:w-1/2 lg:pr-10 order-2 lg:order-1 text-center lg:text-left">
+                    <h4 class="reveal text-brandMuted uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-3 md:mb-4">Nuestra Esencia</h4>
+                    <h2 class="reveal delay-100 font-serif text-3xl md:text-5xl mb-6 md:mb-8 leading-snug text-brandDark">
+                        Tradición, harina y <span class="font-script text-brandAccent text-4xl md:text-5xl">corazón</span>.
+                    </h2>
+                    <p class="reveal delay-200 text-gray-600 mb-4 md:mb-6 font-light leading-relaxed text-base md:text-lg">
+                        En Positano, respetamos los tiempos de la masa. Fermentaciones largas que resultan en bordes alveolados, ligeros y crujientes. Cada pizza es estirada a mano y cocinada a altas temperaturas para garantizar el sabor clásico napolitano.
+                    </p>
+                    <p class="reveal delay-300 text-gray-600 mb-8 md:mb-10 font-light leading-relaxed text-base md:text-lg">
+                        Ya sea que compartas con familia o amigos en Ibagué, nuestra atmósfera te transportará directamente a la costa Amalfitana.
+                    </p>
+                    <div class="reveal delay-300">
+                        <span class="font-script text-3xl md:text-4xl text-brandDark opacity-80">Positano</span>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 reveal order-1 lg:order-2">
+                    <div class="relative w-full aspect-[4/3] md:aspect-auto md:h-[600px]">
+                        <img src="assets/Positano/unnamed.webp" alt="Horneando Pizza" class="rounded-[2rem] shadow-2xl object-cover w-full h-full">
+                        <div class="absolute -bottom-6 -left-6 md:-bottom-8 md:-left-8 bg-white p-2 md:p-3 rounded-full hidden sm:block shadow-xl border border-gray-100">
+                            <img src="assets/Positano/positano.jpg" alt="Sello Positano" class="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Separador Parallax Medio -->
+    <section class="h-[30vh] md:h-[40vh] parallax-bg relative flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1498579150354-977475b7e0b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        <div class="absolute inset-0 bg-brandDark/60"></div>
+        <h2 class="relative z-10 reveal font-script text-4xl md:text-7xl text-center text-white max-w-4xl px-4 leading-relaxed">
+            "Donde hay buena pizza, hay alegría."
+        </h2>
+    </section>
+
+<!-- Sección Menú Integrado Destacado con Modales -->
+    <section id="menu-destacado" class="py-16 md:py-24 bg-white text-brandDark">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-10 md:mb-16 reveal">
+                <h4 class="text-brandMuted uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-2 md:mb-3">Populares</h4>
+                <h2 class="font-serif text-3xl md:text-5xl">Especialidades</h2>
+                <div class="w-12 h-1 bg-brandAccent mx-auto mt-4 md:mt-6 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+                <!-- Tarjeta 1: Lasagna Bolognesa -->
+                <div class="menu-item reveal delay-100 group cursor-pointer flex flex-col h-full bg-brandLight rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300" 
+                     onclick="openModal('Lasagna Bolognesa', 'Clásica receta italiana horneada a la perfección con nuestra tradicional salsa bolognesa de cocción lenta.', 'assets/Positano/lasagñaboloñesa.webp', '$40.000')">
+                    <div class="overflow-hidden aspect-[4/3]">
+                        <img src="assets/Positano/lasagñaboloñesa.webp" alt="Lasagna Bolognesa" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-6 md:p-8 relative flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-serif text-xl md:text-2xl text-brandDark">Lasagna Bolognesa</h3>
+                        </div>
+                        <p class="text-gray-500 font-light mb-4 md:mb-6 text-xs md:text-sm leading-relaxed line-clamp-3">Clásica receta italiana horneada a la perfección con nuestra tradicional salsa bolognesa de cocción lenta.</p>
+                        <span class="text-brandMuted uppercase tracking-widest text-[10px] md:text-xs font-bold group-hover:text-brandAccent transition-colors mt-auto flex items-center gap-2">
+                            Ver Detalles
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Lomo Positano -->
+                <div class="menu-item reveal delay-200 group cursor-pointer flex flex-col h-full bg-brandLight rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                     onclick="openModal('Lomo Positano', 'Corte de lomo tierno preparado con la receta exclusiva de la casa. Una experiencia de sabor inigualable.', 'assets/Positano/lomo.webp', '$49.000')">
+                    <div class="overflow-hidden aspect-[4/3]">
+                        <img src="assets/Positano/lomo.webp" alt="Lomo Positano" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-6 md:p-8 relative flex flex-col flex-grow">
+                        <h3 class="font-serif text-xl md:text-2xl mb-2 text-brandDark">Lomo Positano</h3>
+                        <p class="text-gray-500 font-light mb-4 md:mb-6 text-xs md:text-sm leading-relaxed line-clamp-3">Corte de lomo tierno preparado con la receta exclusiva de la casa. Una experiencia de sabor inigualable.</p>
+                        <span class="text-brandMuted uppercase tracking-widest text-[10px] md:text-xs font-bold group-hover:text-brandAccent transition-colors mt-auto flex items-center gap-2">
+                            Ver Detalles
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Pizza Peperonni -->
+                <div class="menu-item reveal delay-300 group cursor-pointer flex flex-col h-full bg-brandLight rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                     onclick="openModal('Pizza Peperonni', 'Salsa napolitana, queso mozzarella y rodajas de pepperoni.', 'assets/Positano/peperonni.webp', '$51.000')">
+                    <div class="overflow-hidden aspect-[4/3]">
+                        <img src="assets/Positano/peperonni.webp" alt="Pizza Peperonni" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-6 md:p-8 relative flex flex-col flex-grow">
+                        <h3 class="font-serif text-xl md:text-2xl mb-2 text-brandDark">Pizza Peperonni</h3>
+                        <p class="text-gray-500 font-light mb-4 md:mb-6 text-xs md:text-sm leading-relaxed line-clamp-3">Salsa napolitana, queso mozzarella y rodajas de pepperoni.</p>
+                        <span class="text-brandMuted uppercase tracking-widest text-[10px] md:text-xs font-bold group-hover:text-brandAccent transition-colors mt-auto flex items-center gap-2">
+                            Ver Detalles
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12 md:mt-16 reveal">
+                <a href="MenuPositano.html" class="inline-block bg-transparent border-2 border-brandDark text-brandDark px-6 md:px-8 py-3 rounded-full hover:bg-brandDark hover:text-white transition-colors uppercase tracking-widest text-xs md:text-sm font-bold">Ver Menú Completo</a>
+            </div>
+        </div>
+    </section>
+
+   
+    <!-- Ubicación y Footer -->
+    <section id="ubicacion" class="bg-brandDark pt-16 md:pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 mb-16 md:mb-20">
+                <!-- Info de Contacto -->
+                <div id="reservas" class="reveal flex flex-col justify-center text-center lg:text-left items-center lg:items-start">
+                    <img src="assets/Positano/positano.jpg" alt="Logo Positano" class="w-20 h-20 md:w-24 md:h-24 rounded-full mb-6 md:mb-8 opacity-90 border-2 border-white/10 bg-white object-cover">
+                    <h2 class="font-serif text-3xl md:text-4xl mb-4 md:mb-6 text-white">Bienvenido a Positano</h2>
+                    <p class="text-brandMuted mb-6 md:mb-8 font-light text-sm md:text-base max-w-md">Disfruta de la mejor cocina italiana en el corazón de la ciudad. Un espacio diseñado para compartir.</p>
+                    
+                    <div class="space-y-4 md:space-y-6 text-gray-300 font-light text-sm md:text-base text-left">
+                        <div class="flex items-start gap-3 md:gap-4">
+                            <span class="text-brandAccent mt-1 text-lg">📍</span>
+                            <p><strong>Ubicación</strong><br>Ibagué, Tolima<br>Terraza San Lorenzo</p>
+                        </div>
+                        <div class="flex items-start gap-3 md:gap-4">
+                            <span class="text-brandAccent mt-1 text-lg">🕒</span>
+                            <p><strong>Horarios</strong><br>Mar - Dom: 12:00 M. - 10:00 P.M.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 md:mt-10 flex gap-4">
+                        <a href="https://www.instagram.com/positano_01/" target="_blank" class="flex items-center gap-3 bg-white/5 hover:bg-brandAccent border border-white/10 px-5 md:px-6 py-2.5 md:py-3 rounded-full transition-all group shadow-lg">
+                            <svg class="w-4 h-4 md:w-5 md:h-5 text-gray-300 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase text-white">Seguir en IG</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contenedor del Mapa con diseño limpio y transición -->
+        <div class="w-full h-96 rounded-2xl overflow-hidden shadow-lg border border-gray-200 transition-all duration-300">
+            <iframe 
+                src="https://maps.google.com/maps?q=4.4248673,-75.1851945&z=17&output=embed" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade"
+                class="w-full h-full grayscale-[0.3] hover:grayscale-0 transition-all duration-500">
+            </iframe>
+        </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-white/10 pt-6 md:pt-8 text-center flex flex-col md:flex-row justify-between items-center text-[9px] md:text-[10px] text-brandMuted uppercase tracking-widest font-bold">
+                <p>&copy; 2026 Positano Cocina Italiana Ibagué. Todos los derechos reservados.</p>
+                <div class="space-x-4 md:space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors">Términos</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Vista Previa -->
+    <div id="product-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-brandDark/80 backdrop-blur-sm" onclick="closeModal()"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-3xl overflow-hidden shadow-2xl w-full max-w-3xl flex flex-col md:flex-row transform scale-95 transition-transform duration-300" id="modal-box">
+            <!-- Botón Cerrar -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 bg-white/50 backdrop-blur-md text-brandDark p-2 rounded-full hover:bg-brandAccent hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <!-- Imagen -->
+            <div class="w-full md:w-1/2 h-64 md:h-auto">
+                <img id="modal-img" src="" alt="Plato" class="w-full h-full object-cover">
+            </div>
+            
+            <!-- Contenido -->
+            <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center bg-brandLight">
+                <span class="text-brandMuted uppercase tracking-widest text-[10px] font-bold mb-2">Especialidad</span>
+                <h3 id="modal-title" class="font-serif text-3xl text-brandDark mb-4">Título</h3>
+                <p id="modal-desc" class="text-gray-600 font-light text-sm leading-relaxed mb-6">Descripción...</p>
+                <div class="flex items-center justify-between mt-auto pt-6 border-t border-gray-200">
+                    <span id="modal-price" class="font-sans font-bold text-xl text-brandDark">$0</span>
+                    <a href="Menu.html"><button class="bg-brandAccent text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-brandDark transition-colors">
+                        Ver menú
+                    </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript para Animaciones e Interacción -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById('navbar');
+            const navLinks = navbar.querySelectorAll('nav a');
+            const logoTitle = document.getElementById('logo-title');
+            const logoSubtitle = document.getElementById('logo-subtitle');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-transparent', 'md:py-6', 'py-4');
+                    navbar.classList.add('py-3');
+                    
+                    // Cambiar logo a oscuro
+                    logoTitle.classList.remove('text-white');
+                    logoTitle.classList.add('text-brandDark');
+                    logoSubtitle.classList.remove('text-white');
+                    logoSubtitle.classList.add('text-brandDark');
+
+                    // Cambiar color de enlaces al hacer scroll
+                    navLinks.forEach(link => {
+                        if(!link.classList.contains('bg-brandDark')) {
+                            link.classList.remove('text-brandLight', 'mix-blend-difference');
+                            link.classList.add('text-brandDark');
+                        }
+                    });
+                } else {
+                    navbar.classList.add('bg-transparent', 'md:py-6', 'py-4');
+                    navbar.classList.remove('bg-white', 'shadow-md', 'py-3');
+                    
+                    // Restaurar logo a blanco
+                    logoTitle.classList.add('text-white');
+                    logoTitle.classList.remove('text-brandDark');
+                    logoSubtitle.classList.add('text-white');
+                    logoSubtitle.classList.remove('text-brandDark');
+
+                    // Restaurar color de enlaces
+                    navLinks.forEach(link => {
+                        if(!link.classList.contains('bg-brandDark')) {
+                            link.classList.add('text-brandLight', 'mix-blend-difference');
+                            link.classList.remove('text-brandDark');
+                        }
+                    });
+                }
+            });
+
+            // Reveal Animaciones
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // Menú Móvil
+            const btnMobile = document.getElementById('btn-mobile');
+            const btnClose = document.getElementById('btn-close');
+            const menuMobile = document.getElementById('menu-mobile');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (menuMobile.classList.contains('hidden')) {
+                    menuMobile.classList.remove('hidden');
+                    setTimeout(() => menuMobile.classList.remove('translate-x-full'), 10);
+                } else {
+                    menuMobile.classList.add('translate-x-full');
+                    setTimeout(() => menuMobile.classList.add('hidden'), 500);
+                }
+            }
+
+            btnMobile.addEventListener('click', toggleMenu);
+            btnClose.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+        });
+
+        // Lógica del Modal
+        const modal = document.getElementById('product-modal');
+        const modalBox = document.getElementById('modal-box');
+        
+        function openModal(title, desc, imgSrc, price) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-desc').textContent = desc;
+            document.getElementById('modal-img').src = imgSrc;
+            document.getElementById('modal-price').textContent = price;
+            
+            modal.classList.remove('hidden');
+            document.body.classList.add('modal-open'); // Previene scroll
+            
+            // Animación de entrada
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalBox.classList.remove('scale-95');
+                modalBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            // Animación de salida
+            modal.classList.add('opacity-0');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.classList.remove('modal-open'); // Restaura scroll
+            }, 300);
+        }
+
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+// Función para ocultar el loader de forma segura
+function dismissLoader() {
+    const loader = document.getElementById('positano-loader');
+    if (!loader || loader.classList.contains('loader-hidden')) return;
+
+    loader.classList.add('loader-hidden');
+    setTimeout(() => {
+        document.body.classList.remove('loading-active');
+    }, 1000);
+}
+
+// Navegación desde el menú de opciones de la pantalla de carga
+document.addEventListener('DOMContentLoaded', () => {
+    const skipBtn = document.getElementById('loader-skip');
+    if (skipBtn) skipBtn.addEventListener('click', dismissLoader);
+
+    document.querySelectorAll('.loader-menu-link[data-loader-scroll]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('data-loader-scroll');
+            const target = document.getElementById(targetId);
+            dismissLoader();
+            setTimeout(() => {
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 350);
+        });
+    });
+});
+
+// Bloquear scroll al iniciar
+document.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add('loading-active');
+
+    // LÍMITE DE SEGURIDAD: si nadie interactúa con el menú, entra al sitio automáticamente.
+    setTimeout(dismissLoader, 10000);
+});
+
+    </script>
+</body>
+</html>
